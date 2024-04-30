@@ -1,10 +1,26 @@
 package com.reportsMicroservice.demo.model;
 
+import jakarta.persistence.*;
+import jdk.jfr.DataAmount;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
+//@Table(name = "employee")
 public class Employee {
     // id , first name, last name, email, address,phone number, hire date, hourly rate, hours worked, salary, employment status, tax info, time off, used time off, pending time off, balance time off, weekly limit
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
@@ -12,23 +28,13 @@ public class Employee {
     private String phoneNumber;
     private LocalDate hireDate;
 
-    public Employee(String firstName, String lastName, String email, String address, String phoneNumber, LocalDate hireDate) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.hireDate = hireDate;
+
+    public Long getId() {
+        return id;
     }
 
-    public Employee(int id, String firstName, String lastName, String email, String address, String phoneNumber, LocalDate hireDate) {
+    public void setId(Long id) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.hireDate = hireDate;
     }
 
     public String getFirstName() {

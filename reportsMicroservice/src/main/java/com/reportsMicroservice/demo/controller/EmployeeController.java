@@ -1,27 +1,31 @@
 package com.reportsMicroservice.demo.controller;
 
 import com.reportsMicroservice.demo.model.Employee;
+import com.reportsMicroservice.demo.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.reportsMicroservice.demo.service.EmployeeService;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("api/v1/employee")
+@RequestMapping("api/employee")
 public class EmployeeController {
 
-    private final EmployeeService employeeService;
+    @Autowired
+    private EmployeeService employeeService;
 
     @Autowired
-    public EmployeeController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
+    EmployeeRepository employeeRepository;
+
+    @GetMapping("getAllEmployees")
+    public Iterable<Employee> getAllEmployees() {
+        return employeeRepository.findAll();
     }
 
-    @GetMapping
-    public List<Employee> getEmployees() {
-       return employeeService.getEmployees();
-     }
+    @PostMapping
+    public Employee addEmployee(Employee employee) {
+        return employeeRepository.save(employee);
+    }
 }

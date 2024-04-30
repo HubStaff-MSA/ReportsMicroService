@@ -12,10 +12,10 @@ import java.util.List;
 @Service
 public class EmployeeService {
 
-    @GetMapping
+   /* @GetMapping
     public List<Employee> getEmployees() {
         return List.of(new Employee(1, "Mariam","Sherif","mariam@gmail","Cairo","011111111", LocalDate.of(2021, Month.JANUARY, 1)),
                 new Employee(2, "Ahmed","Ali","ahmed@gmail","Giza","011111112", LocalDate.of(2021, Month.JANUARY, 1)),
                 new Employee(3, "Sara","Mohamed","sara@gmail","Alex","011111113", LocalDate.of(2021, Month.JANUARY, 1)));
-    }
+    }*/
 }
