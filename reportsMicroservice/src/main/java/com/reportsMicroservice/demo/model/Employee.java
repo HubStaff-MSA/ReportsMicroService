@@ -7,94 +7,115 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Entity
-//@Table(name = "employee")
-public class Employee {
-    // id , first name, last name, email, address,phone number, hire date, hourly rate, hours worked, salary, employment status, tax info, time off, used time off, pending time off, balance time off, weekly limit
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String address;
-    private String phoneNumber;
-    private LocalDate hireDate;
+@Table(name = "Employee")
+public class Employee extends Member {
 
+    @Column(name = "hourlyRate")
+    private BigDecimal hourlyRate;
 
-    public Long getId() {
-        return id;
+    @Column(name = "salary")
+    private BigDecimal salary;
+
+    @Column(name = "employmentStatus")
+    private String employmentStatus;
+
+    @Column(name = "taxInfo")
+    private String taxInfo;
+
+    @Column(name = "usedTimeOff")
+    private Integer usedTimeOff;
+
+    @Column(name = "pendingTimeOff")
+    private Integer pendingTimeOff;
+
+    @Column(name = "balanceTimeOff")
+    private Integer balanceTimeOff;
+
+    @Column(name = "totalHoursWorked")
+    private BigDecimal totalHoursWorked;
+
+    @Column(name = "weeklyLimit")
+    private BigDecimal weeklyLimit;
+
+    // Constructors, getters, and setters (omitted for brevity)
+
+    public BigDecimal getHourlyRate() {
+        return hourlyRate;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setHourlyRate(BigDecimal hourlyRate) {
+        this.hourlyRate = hourlyRate;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public BigDecimal getSalary() {
+        return salary;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setSalary(BigDecimal salary) {
+        this.salary = salary;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getEmploymentStatus() {
+        return employmentStatus;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setEmploymentStatus(String employmentStatus) {
+        this.employmentStatus = employmentStatus;
     }
 
-    public String getEmail() {
-        return email;
+    public String getTaxInfo() {
+        return taxInfo;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setTaxInfo(String taxInfo) {
+        this.taxInfo = taxInfo;
     }
 
-    public String getAddress() {
-        return address;
+    public Integer getUsedTimeOff() {
+        return usedTimeOff;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setUsedTimeOff(Integer usedTimeOff) {
+        this.usedTimeOff = usedTimeOff;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public Integer getPendingTimeOff() {
+        return pendingTimeOff;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPendingTimeOff(Integer pendingTimeOff) {
+        this.pendingTimeOff = pendingTimeOff;
     }
 
-    public LocalDate getHireDate() {
-        return hireDate;
+    public Integer getBalanceTimeOff() {
+        return balanceTimeOff;
     }
 
-    public void setHireDate(LocalDate hireDate) {
-        this.hireDate = hireDate;
+    public void setBalanceTimeOff(Integer balanceTimeOff) {
+        this.balanceTimeOff = balanceTimeOff;
     }
 
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", hireDate=" + hireDate +
-                '}';
+    public BigDecimal getTotalHoursWorked() {
+        return totalHoursWorked;
+    }
+
+    public void setTotalHoursWorked(BigDecimal totalHoursWorked) {
+        this.totalHoursWorked = totalHoursWorked;
+    }
+
+    public BigDecimal getWeeklyLimit() {
+        return weeklyLimit;
+    }
+
+    public void setWeeklyLimit(BigDecimal weeklyLimit) {
+        this.weeklyLimit = weeklyLimit;
     }
 }

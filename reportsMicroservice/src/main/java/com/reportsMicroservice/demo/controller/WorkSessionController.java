@@ -23,4 +23,10 @@ public class WorkSessionController {
         List<WorkSessionReport> workSessions = workSessionService.getWorkSessionsByEmployeeId(employeeId);
         return ResponseEntity.ok(workSessions);
     }
+
+    @GetMapping("/reports")
+    public ResponseEntity<List<WorkSessionReport>> getAllWorkSessionReports() {
+        List<WorkSessionReport> reports = workSessionService.getAllWorkSessionReports();
+        return ResponseEntity.ok(reports);
+    }
 }

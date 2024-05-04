@@ -10,9 +10,13 @@ import java.util.List;
 @Service
 public class WorkSessionService {
     @Autowired
-    private WorkSessionRepository workSessionRepository;
+    private WorkSessionRepository workSessionReportRepository;
+
+    public List<WorkSessionReport> getAllWorkSessionReports() {
+        return workSessionReportRepository.getAllWorkSessionReports();
+    }
 
     public List<WorkSessionReport> getWorkSessionsByEmployeeId(Long employeeId) {
-        return workSessionRepository.findByEmployeeId(employeeId);
+        return workSessionReportRepository.findByMemberId(employeeId);
     }
 }
