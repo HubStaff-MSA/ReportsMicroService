@@ -1,7 +1,7 @@
 package com.reportsMicroservice.demo.controller;
 
 import com.reportsMicroservice.demo.model.WorkSessionReport;
-import com.reportsMicroservice.demo.service.WorkSessionService;
+import com.reportsMicroservice.demo.service.WorkSessionReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,20 +13,20 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/reports/work-sessions")
-public class WorkSessionController {
+public class WorkSessionReportController {
     @Autowired
-    private WorkSessionService workSessionService;
+    private WorkSessionReportService workSessionReportService;
 
     // Endpoint to get work sessions by employee ID
     @GetMapping("/employee/{employeeId}")
     public ResponseEntity<List<WorkSessionReport>> getWorkSessionsByEmployeeId(@PathVariable Long employeeId) {
-        List<WorkSessionReport> workSessions = workSessionService.getWorkSessionsByEmployeeId(employeeId);
+        List<WorkSessionReport> workSessions = workSessionReportService.getWorkSessionsByEmployeeId(employeeId);
         return ResponseEntity.ok(workSessions);
     }
 
     @GetMapping("/reports")
     public ResponseEntity<List<WorkSessionReport>> getAllWorkSessionReports() {
-        List<WorkSessionReport> reports = workSessionService.getAllWorkSessionReports();
+        List<WorkSessionReport> reports = workSessionReportService.getAllWorkSessionReports();
         return ResponseEntity.ok(reports);
     }
 }

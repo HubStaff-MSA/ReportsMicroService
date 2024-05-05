@@ -15,8 +15,22 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "Employee")
 public class Employee extends Member {
+
+    @Column(name = "firstName")
+    private String firstName;
+    @Column(name = "lastName")
+    private String lastName;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "address")
+    private String address;
+    @Column(name = "phoneNumber")
+    private String phoneNumber;
+    @Column(name = "hireDate")
+    private LocalDate hireDate;
 
     @Column(name = "hourlyRate")
     private BigDecimal hourlyRate;

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface WorkSessionRepository extends JpaRepository<WorkSessionReport, Long> {
+public interface WorkSessionReportRepository extends JpaRepository<WorkSessionReport, Long> {
 
     // Define custom queries as needed
     // Example: Find work sessions by employee ID
