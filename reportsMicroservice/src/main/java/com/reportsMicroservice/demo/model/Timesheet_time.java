@@ -1,11 +1,13 @@
 package com.reportsMicroservice.demo.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+@Getter
 @Entity
 @Table(name = "timesheet_time")
 public class Timesheet_time {
@@ -14,11 +16,13 @@ public class Timesheet_time {
     @Column(name = "timesheet_id")
     private Long timesheetId;
 
-    @Column(name = "member_id")
-    private Long memberId;
+    @ManyToOne
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")  // Changed from member_id to employee_id for clarity
+    private Employee employee;  // Renamed field from member to employee
+
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id", referencedColumnName = "projectId")
+    @JoinColumn(name = "projectId", referencedColumnName = "projectId")
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -58,112 +62,56 @@ public class Timesheet_time {
 
     // Getter and setter methods for all fields...
 
-    public Long getTimesheetId() {
-        return timesheetId;
-    }
-
     public void setTimesheetId(Long timesheetId) {
         this.timesheetId = timesheetId;
     }
 
-    public Long getMemberId() {
-        return memberId;
-    }
-
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
-    }
-
-    public Project getProject() {
-        return project;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public void setProject(Project project) {
         this.project = project;
     }
 
-    public ToDo getTodo() {
-        return todo;
-    }
-
     public void setTodo(ToDo todo) {
         this.todo = todo;
-    }
-
-    public LocalDate getDate() {
-        return date;
     }
 
     public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
     public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
     }
 
     public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 
-    public boolean isBillable() {
-        return billable;
-    }
-
     public void setBillable(boolean billable) {
         this.billable = billable;
-    }
-
-    public String getReason() {
-        return reason;
     }
 
     public void setReason(String reason) {
         this.reason = reason;
     }
 
-    public String getNote() {
-        return note;
-    }
-
     public void setNote(String note) {
         this.note = note;
-    }
-
-    public LocalTime getDuration() {
-        return duration;
     }
 
     public void setDuration(LocalTime duration) {
         this.duration = duration;
     }
 
-    public boolean isManual() {
-        return manual;
-    }
-
     public void setManual(boolean manual) {
         this.manual = manual;
     }
 
-    public ActionEnum getAction() {
-        return action;
-    }
-
     public void setAction(ActionEnum action) {
         this.action = action;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {

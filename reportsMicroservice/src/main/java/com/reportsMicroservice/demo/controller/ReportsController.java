@@ -12,21 +12,18 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/reports/work-sessions")
-public class WorkSessionReportController {
+@RequestMapping("/api/reports")
+public class ReportsController {
+
     @Autowired
     private WorkSessionReportService workSessionReportService;
 
-    // Endpoint to get work sessions by employee ID
-    @GetMapping("/employee/{employeeId}")
-    public ResponseEntity<List<WorkSessionReport>> getWorkSessionsByEmployeeId(@PathVariable Long employeeId) {
-        List<WorkSessionReport> workSessions = workSessionReportService.getWorkSessionsByEmployeeId(employeeId);
-        return ResponseEntity.ok(workSessions);
-    }
-
-    @GetMapping("/reports")
-    public ResponseEntity<List<WorkSessionReport>> getAllWorkSessionReports() {
-        List<WorkSessionReport> reports = workSessionReportService.getAllWorkSessionReports();
+    @GetMapping("/work-sessions")
+    public ResponseEntity<List<WorkSessionReport>> getWorkSessionReports() {
+        List<WorkSessionReport> reports = workSessionReportService.generateReport();
         return ResponseEntity.ok(reports);
     }
+
+    // Other report endpoints can be added here
 }
+

@@ -2,33 +2,27 @@ package com.reportsMicroservice.demo.model;
 
 import jakarta.persistence.*;
 import jdk.jfr.DataAmount;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Builder
 @Table(name = "Employee")
-public class Employee extends Member {
+public class Employee extends User {
 
-    @Column(name = "firstName")
-    private String firstName;
-    @Column(name = "lastName")
-    private String lastName;
-    @Column(name = "email")
-    private String email;
     @Column(name = "address")
     private String address;
+
     @Column(name = "phoneNumber")
     private String phoneNumber;
+
     @Column(name = "hireDate")
     private LocalDate hireDate;
 

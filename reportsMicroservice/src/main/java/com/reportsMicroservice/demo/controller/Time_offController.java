@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/time_off")
+@RequestMapping("/api/time_off")
 public class Time_offController {
     @Autowired
     private Time_offService time_offService;

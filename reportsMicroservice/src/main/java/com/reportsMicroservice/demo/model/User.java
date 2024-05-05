@@ -1,10 +1,19 @@
 package com.reportsMicroservice.demo.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
+@Getter
 @Entity
-@Table(name = "User")
-public class User extends Member {
+@Table(name = "'User'")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type")
+public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
@@ -27,40 +36,20 @@ public class User extends Member {
         USER, VIEWER, MANAGER
     }
 
-    public UserRole getRole() {
-        return role;
-    }
-
     public void setRole(UserRole role) {
         this.role = role;
-    }
-
-    public String getFirstName() {
-        return firstName;
     }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setPassword(String password) {

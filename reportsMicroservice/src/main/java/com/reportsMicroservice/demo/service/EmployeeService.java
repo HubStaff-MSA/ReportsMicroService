@@ -1,21 +1,41 @@
 package com.reportsMicroservice.demo.service;
 
 import com.reportsMicroservice.demo.model.Employee;
-import org.springframework.stereotype.Component;
+import com.reportsMicroservice.demo.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+import java.util.Optional;
 
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
-   /* @GetMapping
-    public List<Employee> getEmployees() {
-        return List.of(new Employee(1, "Mariam","Sherif","mariam@gmail","Cairo","011111111", LocalDate.of(2021, Month.JANUARY, 1)),
-                new Employee(2, "Ahmed","Ali","ahmed@gmail","Giza","011111112", LocalDate.of(2021, Month.JANUARY, 1)),
-                new Employee(3, "Sara","Mohamed","sara@gmail","Alex","011111113", LocalDate.of(2021, Month.JANUARY, 1)));
-    }*/
+    // Get all employees
+    public List<Employee> getAllEmployees() {
+        return employeeRepository.findAll();
+    }
+
+    // Get a single employee by ID
+    public Optional<Employee> getEmployeeById(Long id) {
+        return employeeRepository.findById(id);
+    }
+
+    // Create or update an employee
+    public Employee saveEmployee(Employee employee) {
+        return employeeRepository.save(employee);
+    }
+
+    // Delete an employee
+    public void deleteEmployee(Long id) {
+        employeeRepository.deleteById(id);
+    }
+
 }

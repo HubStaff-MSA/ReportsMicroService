@@ -2,9 +2,11 @@ package com.reportsMicroservice.demo.model;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.Date;
 
+@Getter
 @Entity
 @Table(name = "Shift")
 public class Shift {
@@ -15,8 +17,8 @@ public class Shift {
     private int shiftId;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Employee member;
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")  // Changed from member_id to employee_id for clarity
+    private Employee employee;
 
     @Column(name = "start_datetime")
     private Date startDatetime;
@@ -52,6 +54,44 @@ public class Shift {
     public enum IssueStatus {
         NOT_STARTED, ON_TIME, LATE, ABANDONED, MISSED
     }
-    // Getters and setters (omitted for brevity)
 
+    public void setShiftId(int shiftId) {
+        this.shiftId = shiftId;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public void setStartDatetime(Date startDatetime) {
+        this.startDatetime = startDatetime;
+    }
+
+    public void setEndDatetime(Date endDatetime) {
+        this.endDatetime = endDatetime;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
+
+    public void setMinimumHours(double minimumHours) {
+        this.minimumHours = minimumHours;
+    }
+
+    public void setRepeats(RepeatType repeats) {
+        this.repeats = repeats;
+    }
+
+    public void setRepeatDayOfWeek(String repeatDayOfWeek) {
+        this.repeatDayOfWeek = repeatDayOfWeek;
+    }
+
+    public void setRepeatUntilDate(Date repeatUntilDate) {
+        this.repeatUntilDate = repeatUntilDate;
+    }
+
+    public void setIssueStatus(IssueStatus issueStatus) {
+        this.issueStatus = issueStatus;
+    }
 }

@@ -17,20 +17,17 @@ public class ReportsApplication {
 	}
 
 	@Bean
-	public CommandLineRunner commandLineRunner(
-			EmployeeRepository employeeRepository
-	){
+	public CommandLineRunner commandLineRunner(EmployeeRepository employeeRepository) {
 		return args -> {
-			var employee = Employee.builder()
-					.firstName("fname")
-					.lastName("lname")
-					.email("emailText")
-					.address("addressText")
-					.phoneNumber("011100")
-					.hireDate(LocalDate.of(2021, 1, 1))
-					.build();
+			Employee employee = new Employee();
+			employee.setFirstName("fname");
+			employee.setLastName("lname");
+			employee.setEmail("emailText");
+			employee.setPassword("securePassword123");
+			employee.setAddress("addressText");
+			employee.setPhoneNumber("011100");
+			employee.setHireDate(LocalDate.of(2021, 1, 1));
 			employeeRepository.save(employee);
-
 		};
 
 	}

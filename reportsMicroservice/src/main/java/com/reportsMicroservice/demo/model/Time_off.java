@@ -12,8 +12,8 @@ public class Time_off {
     private int timeOffId;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id")
-    private Employee employee;
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")  // Changed from member_id to employee_id for clarity
+    private Employee employee;  // Renamed field from member to employee
 
     @ManyToOne
     @JoinColumn(name = "approved_by")

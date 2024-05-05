@@ -16,8 +16,8 @@ public class ToDo {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "assignee_id", nullable = false)
-    private Member assignee;
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")  // Changed from member_id to employee_id for clarity
+    private Employee employee;  // Renamed field from member to employee
 
     @Column(name = "assignee_type", nullable = false)
     private String assigneeType;
@@ -45,12 +45,12 @@ public class ToDo {
         this.content = content;
     }
 
-    public Member getAssignee() {
-        return assignee;
+    public Employee getAssignee() {
+        return employee;
     }
 
-    public void setAssignee(Member assignee) {
-        this.assignee = assignee;
+    public void setAssignee(Employee assignee) {
+        this.employee = assignee;
     }
 
     public String getAssigneeType() {

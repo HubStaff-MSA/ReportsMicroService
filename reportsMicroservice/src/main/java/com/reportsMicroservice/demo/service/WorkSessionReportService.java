@@ -1,9 +1,9 @@
 package com.reportsMicroservice.demo.service;
 
+import com.reportsMicroservice.demo.model.Employee;
 import com.reportsMicroservice.demo.model.Timesheet_time;
 import com.reportsMicroservice.demo.model.WorkSessionReport;
 import com.reportsMicroservice.demo.repository.Timesheet_timeRepository;
-import com.reportsMicroservice.demo.repository.WorkSessionReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,39 +13,29 @@ import java.util.stream.Collectors;
 @Service
 public class WorkSessionReportService {
 
-    private final Timesheet_timeRepository timesheetTimeRepository; // Assuming you have a repository for Timesheet_time
+    @Autowired
+    private Timesheet_timeRepository timesheetRepository;
 
-    public WorkSessionReportService(Timesheet_timeRepository timesheetTimeRepository) {
-        this.timesheetTimeRepository = timesheetTimeRepository;
+    public List<WorkSessionReport> generateReport() {
+        List<Timesheet_time> timesheet = timesheetRepository.findAll(); // Or use a custom query to fetch relevant data
+        return timesheet.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-//    public List<WorkSessionReport> generateWorkSessionReport() {
-//        List<Timesheet_time> timesheetEntries = timesheetTimeRepository.findAll(); // Retrieve all timesheet entries
-//
-//        return timesheetEntries.stream()
-//                .map(this::mapToWorkSessionReportDTO)
-//                .collect(Collectors.toList());
-//    }
+    private WorkSessionReport convertToDTO(Timesheet_time timesheet) {
+        WorkSessionReport dto = new WorkSessionReport();
+        // Assuming that Timesheet_time references User and Employee correctly
+        Employee employee = (Employee) timesheet.getEmployee(); // This casting assumes every User in Timesheet_time is an Employee
+        String fullName = employee != null ? employee.getFirstName() + " " + employee.getLastName() : "Unknown User";
 
-//    private WorkSessionReport mapToWorkSessionReportDTO(Timesheet_time timesheetTime) {
-//        WorkSessionReport dto = new WorkSessionReport();
-//        dto.setClientName(timesheetTime.getProject().getClient().getName());
-//        dto.setProjectName(timesheetTime.getProject().getProjectName());
-//        dto.setMemberName(getMemberNameById(timesheetTime.getMemberId())); // Implement this method
-//        dto.setTodoDescription(timesheetTime.getTodo().getDescription()); // Assuming you have Todo entity with description
-//        dto.setManual(timesheetTime.isManual());
-//        dto.setStartTime(timesheetTime.getStartTime());
-//        dto.setEndTime(timesheetTime.getEndTime());
-//        dto.setDuration(Duration.between(timesheetTime.getStartTime(), timesheetTime.getEndTime()));
-//        dto.setActivity(timesheetTime.getAction().toString());
-//
-//        return dto;
-//    }
-
-    private String getMemberNameById(Long memberId) {
-        // Implement a method to fetch member name based on memberId
-        // Example: Member member = memberRepository.findById(memberId).orElse(null);
-        // Return member.getName() if member is found
-        return ""; // Placeholder implementation
+        dto.setClientName(timesheet.getProject().getClient().getName());
+        dto.setProjectName(timesheet.getProject().getProjectName());
+        dto.setMemberName(fullName); // Adjust naming if needed
+        dto.setTodo(timesheet.getTodo().getContent());
+        dto.setManual(timesheet.isManual());
+        dto.setStartTime(timesheet.getStartTime());
+        dto.setEndTime(timesheet.getEndTime());
+        dto.setDuration(timesheet.getDuration());
+        dto.setActivity(timesheet.getAction().toString()); // Assuming 'action' represents activity level
+        return dto;
     }
 }
