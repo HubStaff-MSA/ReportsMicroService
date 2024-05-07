@@ -18,7 +18,7 @@ public class Timesheet_time {
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")  // Changed from member_id to employee_id for clarity
-    private Employee employee;  // Renamed field from member to employee
+    private User employee;  // Renamed field from member to employee
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -66,7 +66,7 @@ public class Timesheet_time {
         this.timesheetId = timesheetId;
     }
 
-    public void setEmployee(Employee employee) {
+    public void setEmployee(User employee) {
         this.employee = employee;
     }
 

@@ -1,7 +1,7 @@
 package com.reportsMicroservice.demo.service;
 
-import com.reportsMicroservice.demo.model.Employee;
 import com.reportsMicroservice.demo.model.Timesheet_time;
+import com.reportsMicroservice.demo.model.User;
 import com.reportsMicroservice.demo.model.WorkSessionReport;
 import com.reportsMicroservice.demo.repository.Timesheet_timeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,8 @@ public class WorkSessionReportService {
     private WorkSessionReport convertToDTO(Timesheet_time timesheet) {
         WorkSessionReport dto = new WorkSessionReport();
         // Assuming that Timesheet_time references User and Employee correctly
-        Employee employee = (Employee) timesheet.getEmployee(); // This casting assumes every User in Timesheet_time is an Employee
-        String fullName = employee != null ? employee.getFirstName() + " " + employee.getLastName() : "Unknown User";
+        User employee = timesheet.getEmployee();// This casting assumes every User in Timesheet_time is an Employee
+        String fullName = employee != null ? employee.getFullName() : "Unknown User";
 
         dto.setClientName(timesheet.getProject().getClient().getName());
         dto.setProjectName(timesheet.getProject().getProjectName());

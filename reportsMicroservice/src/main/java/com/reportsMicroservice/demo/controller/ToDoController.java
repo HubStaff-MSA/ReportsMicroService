@@ -19,17 +19,17 @@ public class ToDoController {
         return ResponseEntity.ok(toDoService.getAllToDos());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{todo_id}")
     public ResponseEntity<Optional<ToDo>> getToDoById(@PathVariable int id) {
         return ResponseEntity.ok(toDoService.getToDoById(id));
     }
 
     @PostMapping
-    public ResponseEntity<ToDo> saveOrUpdate(@RequestBody ToDo toDo) {
+    public ResponseEntity<ToDo> createToDo(@RequestBody ToDo toDo) {
         return ResponseEntity.ok(toDoService.saveOrUpdate(toDo));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{todo_id}")
     public ResponseEntity<Void> deleteToDoById(@PathVariable int id) {
         toDoService.deleteToDoById(id);
         return ResponseEntity.ok().build();

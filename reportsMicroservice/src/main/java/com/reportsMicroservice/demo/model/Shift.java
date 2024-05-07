@@ -18,7 +18,7 @@ public class Shift {
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")  // Changed from member_id to employee_id for clarity
-    private Employee employee;
+    private User employee;
 
     @Column(name = "start_datetime")
     private Date startDatetime;
@@ -59,7 +59,7 @@ public class Shift {
         this.shiftId = shiftId;
     }
 
-    public void setEmployee(Employee employee) {
+    public void setEmployee(User employee) {
         this.employee = employee;
     }
 
