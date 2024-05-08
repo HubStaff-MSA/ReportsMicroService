@@ -1,7 +1,8 @@
 package com.reportsMicroservice.demo.service;
-import com.reportsMicroservice.demo.model.Timesheet_time;
-import com.reportsMicroservice.demo.model.WorkSessionReport;
-import com.reportsMicroservice.demo.repository.Timesheet_timeRepository;
+import com.reportsMicroservice.demo.model.others.Timesheet_time;
+import com.reportsMicroservice.demo.model.reports.WorkSessionReport;
+import com.reportsMicroservice.demo.repository.others.Timesheet_timeRepository;
+import com.reportsMicroservice.demo.service.reports.WorkSessionReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;

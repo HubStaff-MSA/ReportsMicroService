@@ -1,7 +1,0 @@
-CREATE TABLE Client (
-    clientId INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    phoneNumber VARCHAR(20),
-    address VARCHAR(255)
-);
