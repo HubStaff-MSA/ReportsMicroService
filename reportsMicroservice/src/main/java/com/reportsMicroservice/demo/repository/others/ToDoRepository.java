@@ -18,8 +18,6 @@ public class ToDoRepository {
 
 
     }
-
-    //get todo by user id (not a list)
     public ToDo findByUserId(Integer userId) {
         return todos.stream()
                 .filter(todo -> todo.getUserId().equals(userId))
