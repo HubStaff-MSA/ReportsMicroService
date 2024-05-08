@@ -16,7 +16,7 @@ public class Timesheet_timeService {
         return timesheet_timeRepository.findAll();
     }
 
-    public Optional<Timesheet_time> getTimesheet_timeById(Long id) {
+    public Optional<Timesheet_time> getTimesheet_timeById(Integer id) {
         return timesheet_timeRepository.findById(id);
     }
 
@@ -28,7 +28,7 @@ public class Timesheet_timeService {
         return timesheet_timeRepository.save(timesheet_time);
     }
 
-    public void deleteTimesheet_time(Long id) {
+    public void deleteTimesheet_time(Integer id) {
         timesheet_timeRepository.deleteById(id);
     }
 

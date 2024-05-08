@@ -11,7 +11,8 @@ import java.util.Date;
 public class Time_off {
     @Id
     @Column(name = "time_off_id")
-    private int timeOffId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer timeOffId;
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")  // Changed from member_id to employee_id for clarity

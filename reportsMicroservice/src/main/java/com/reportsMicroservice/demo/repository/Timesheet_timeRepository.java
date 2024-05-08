@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 
-public interface Timesheet_timeRepository extends JpaRepository<Timesheet_time, Long> {
+public interface Timesheet_timeRepository extends JpaRepository<Timesheet_time, Integer> {
 }

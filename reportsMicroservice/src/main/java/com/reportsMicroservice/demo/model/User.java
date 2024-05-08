@@ -19,7 +19,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Getter
     @Enumerated(EnumType.STRING)
@@ -48,17 +48,7 @@ public class User {
     @Column(name = "organizationId")
     private Integer organizationId;
 
-    @Getter
-    @ManyToMany(mappedBy = "users")
-    private Set<Project> projects;
     //---------------------------------------------Employee fields---------------------------------------------
-    @Getter
-    @Column(name = "address")
-    private String address;
-
-    @Getter
-    @Column(name = "phoneNumber")
-    private String phoneNumber;
 
     @Getter
     @Column(name = "hireDate")
@@ -116,14 +106,6 @@ public class User {
         this.password = password;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public void setHireDate(LocalDate hireDate) {
         this.hireDate = hireDate;
     }
@@ -164,7 +146,7 @@ public class User {
         this.weeklyLimit = weeklyLimit;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

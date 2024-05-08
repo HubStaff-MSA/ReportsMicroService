@@ -7,24 +7,22 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-
+@Getter
+//@Entity
+//@Table(name = "WorkSessionReport")
 public class WorkSessionReport {
-    @Getter
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    @Column(name = "workSessionReportId")
+
     private String clientName;
-    @Getter
     private String projectName;
-    @Getter
     private String memberName;
-    @Getter
     private String todoDescription;
     private boolean isManual;
-    @Getter
     private LocalTime startTime;
-    @Getter
     private LocalTime endTime;
-    @Getter
     private LocalTime duration;
-    @Getter
     private String activity;
 
     public void setClientName(String clientName) {
@@ -41,10 +39,6 @@ public class WorkSessionReport {
 
     public void setTodo(String todoDescription) {
         this.todoDescription = todoDescription;
-    }
-
-    public boolean isManual() {
-        return isManual;
     }
 
     public void setManual(boolean manual) {

@@ -22,7 +22,7 @@ public class Timesheet_timeController {
     }
 
     @GetMapping("/{timesheet_timeId}")
-    public ResponseEntity<Timesheet_time> getTimesheet_timeById(@PathVariable Long timesheet_timeId) {
+    public ResponseEntity<Timesheet_time> getTimesheet_timeById(@PathVariable Integer timesheet_timeId) {
         return timesheet_timeService.getTimesheet_timeById(timesheet_timeId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -35,7 +35,7 @@ public class Timesheet_timeController {
     }
 
     @DeleteMapping("/{timesheet_timeId}")
-    public ResponseEntity<Void> deleteTimesheet_time(@PathVariable Long timesheet_timeId) {
+    public ResponseEntity<Void> deleteTimesheet_time(@PathVariable Integer timesheet_timeId) {
         timesheet_timeService.deleteTimesheet_time(timesheet_timeId);
         return ResponseEntity.noContent().build();
     }

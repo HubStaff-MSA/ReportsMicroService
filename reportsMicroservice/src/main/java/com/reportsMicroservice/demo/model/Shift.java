@@ -14,7 +14,7 @@ public class Shift {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shift_id")
-    private int shiftId;
+    private Integer shiftId;
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")  // Changed from member_id to employee_id for clarity

@@ -21,7 +21,7 @@ public class Time_offController {
     }
 
     @GetMapping("/{time_offId}")
-    public ResponseEntity<Time_off> getTime_offById(@PathVariable Long time_offId) {
+    public ResponseEntity<Time_off> getTime_offById(@PathVariable Integer time_offId) {
         return time_offService.getTime_offById(time_offId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -34,7 +34,7 @@ public class Time_offController {
     }
 
     @DeleteMapping("/{time_offId}")
-    public ResponseEntity<Void> deleteTime_off(@PathVariable Long time_offId) {
+    public ResponseEntity<Void> deleteTime_off(@PathVariable Integer time_offId) {
         time_offService.deleteTime_off(time_offId);
         return ResponseEntity.noContent().build();
     }

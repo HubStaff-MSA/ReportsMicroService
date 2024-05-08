@@ -13,14 +13,13 @@ public class ToDo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "todo_id")
-    private int todoId;
+    private Integer todoId;
 
     @Column(name = "content", nullable = false)
     private String content;
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "id",nullable = false)
-    private User employee;  //Assignee
+    @Column(name = "user_id", nullable = false)
+    private Integer userId;  //Assignee
 
 
     public void setTodoId(int todoId) {
@@ -31,7 +30,7 @@ public class ToDo {
         this.content = content;
     }
 
-    public void setEmployee(User employee) {
-        this.employee = employee;
+    public void setEmployee(Integer employee) {
+        this.userId = employee;
     }
 }

@@ -14,20 +14,19 @@ public class Timesheet_time {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "timesheet_id")
-    private Long timesheetId;
+    private Integer timesheetId;
 
-    @ManyToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "id")  // Changed from member_id to employee_id for clarity
-    private User employee;  // Renamed field from member to employee
+    @Getter
+    @Column(name = "user_id")
+    private Integer userId;
 
+    @Getter
+    @Column(name = "project_id")
+    private Integer projectId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "projectId", referencedColumnName = "projectId")
-    private Project project;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "todo_id", referencedColumnName = "todo_id")
-    private ToDo todo;
+    @Getter
+    @Column(name = "todo_id")
+    private Integer todoId;
 
     @Column(name = "date")
     private LocalDate date;
@@ -62,20 +61,20 @@ public class Timesheet_time {
 
     // Getter and setter methods for all fields...
 
-    public void setTimesheetId(Long timesheetId) {
+    public void setTimesheetId(Integer timesheetId) {
         this.timesheetId = timesheetId;
     }
 
-    public void setEmployee(User employee) {
-        this.employee = employee;
+    public void setEmployee(Integer employee) {
+        this.userId = employee;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
+    public void setProject(Integer project) {
+        this.projectId = project;
     }
 
-    public void setTodo(ToDo todo) {
-        this.todo = todo;
+    public void setTodo(Integer todo) {
+        this.projectId = todo;
     }
 
     public void setDate(LocalDate date) {

@@ -10,7 +10,7 @@ public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "client_id")
-    private Long clientId;
+    private Integer clientId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -26,7 +26,7 @@ public class Client {
 
     // Getters and setters (omitted for brevity)
 
-    public void setClientId(Long clientId) {
+    public void setClientId(Integer clientId) {
         this.clientId = clientId;
     }
 

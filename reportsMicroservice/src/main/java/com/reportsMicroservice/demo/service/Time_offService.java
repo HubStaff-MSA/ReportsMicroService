@@ -16,7 +16,7 @@ public class Time_offService {
         return time_offRepository.findAll();
     }
 
-    public Optional<Time_off> getTime_offById(Long id) {
+    public Optional<Time_off> getTime_offById(Integer id) {
         return time_offRepository.findById(id);
     }
 
@@ -24,7 +24,7 @@ public class Time_offService {
         return time_offRepository.save(time_off);
     }
 
-    public void deleteTime_offById(Long id) {
+    public void deleteTime_offById(Integer id) {
         time_offRepository.deleteById(id);
     }
 
@@ -33,7 +33,7 @@ public class Time_offService {
         return time_offRepository.save(timeOff);
     }
 
-    public void deleteTime_off(Long id) {
+    public void deleteTime_off(Integer id) {
         time_offRepository.deleteById(id);
     }
 }

@@ -17,7 +17,7 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
-    public Optional<Project> getProjectById(String projectId) {
+    public Optional<Project> getProjectById(Integer projectId) {
         return projectRepository.findById(projectId);
     }
 
@@ -25,7 +25,7 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
-    public void deleteProject(String projectId) {
+    public void deleteProject(Integer projectId) {
         projectRepository.deleteById(projectId);
     }
 }

@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 
-public interface Time_offRepository extends JpaRepository<Time_off, Long> {
+public interface Time_offRepository extends JpaRepository<Time_off, Integer> {
 }

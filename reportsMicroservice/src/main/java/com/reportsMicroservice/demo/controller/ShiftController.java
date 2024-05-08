@@ -20,7 +20,7 @@ public class ShiftController {
     }
 
     @GetMapping("/{shiftId}")
-    public ResponseEntity<Shift> getShiftById(@PathVariable Long shiftId) {
+    public ResponseEntity<Shift> getShiftById(@PathVariable Integer shiftId) {
         return shiftService.getShiftById(shiftId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -33,7 +33,7 @@ public class ShiftController {
     }
 
     @DeleteMapping("/{shiftId}")
-    public ResponseEntity<Void> deleteShift(@PathVariable Long shiftId) {
+    public ResponseEntity<Void> deleteShift(@PathVariable Integer shiftId) {
         shiftService.deleteShift(shiftId);
         return ResponseEntity.noContent().build();
     }

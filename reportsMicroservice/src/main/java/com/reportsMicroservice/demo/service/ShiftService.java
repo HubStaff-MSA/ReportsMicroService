@@ -15,7 +15,7 @@ public class ShiftService {
         return shiftRepository.findAll();
     }
 
-    public Optional<Shift> getShiftById(Long id) {
+    public Optional<Shift> getShiftById(Integer id) {
         return shiftRepository.findById(id);
     }
 
@@ -23,7 +23,7 @@ public class ShiftService {
         return shiftRepository.save(shift);
     }
 
-    public void deleteShift(Long id) {
+    public void deleteShift(Integer id) {
         shiftRepository.deleteById(id);
     }
 

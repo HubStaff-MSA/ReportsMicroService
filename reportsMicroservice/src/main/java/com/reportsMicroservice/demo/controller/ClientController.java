@@ -23,7 +23,7 @@ public class ClientController {
     }
 
     @GetMapping("/{clientId}")
-    public ResponseEntity<Client> getClientById(@PathVariable Long clientId) {
+    public ResponseEntity<Client> getClientById(@PathVariable Integer clientId) {
         return clientService.getClientById(clientId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -36,7 +36,7 @@ public class ClientController {
     }
 
     @DeleteMapping("/{clientId}")
-    public ResponseEntity<Void> deleteClient(@PathVariable Long clientId) {
+    public ResponseEntity<Void> deleteClient(@PathVariable Integer clientId) {
         clientService.deleteClient(clientId);
         return ResponseEntity.noContent().build();
     }
