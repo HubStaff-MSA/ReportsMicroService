@@ -1,42 +1,44 @@
 package com.reportsMicroservice.demo.model.others;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Getter
-@Entity
-@Table(name = "Project")
+@AllArgsConstructor
+@Setter
 public class Project {
-    @Id
-    @Column(name = "projectId")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer projectId;
 
-    @Getter
+    private Integer projectId;
     private String projectName;
-    @Getter
     private boolean billable;
-    @Getter
     private boolean disableActivity;
-    @Getter
     private boolean disableIdleTime;
-    @Getter
     private Integer clientId;
-    //private BudgetType budgetType;
-    //private BudgetBasedOn budgetBasedOn;
-    @Getter
     private Double budgetCost;
-    @Getter
+
+    private BudgetType budgetType; ////
+    private BudgetBasedOn budgetBasedOn; ////
     private Double budgetNotifyAt;
-    @Getter
-    private Date budgetStartDate;
-    @Getter
+    private LocalDate budgetStartDate;
     private boolean budgetIncludeNonBillabeTime;
+
+    public enum BudgetType {
+        TotalCost,
+        TotalHours
+    }
+
+    public enum BudgetBasedOn {
+        BillRate,
+        PayRate
+    }
 
     public Project(Integer projectId, String projectName, boolean billable, boolean disableActivity, boolean disableIdleTime, Integer clientId, Double budgetCost) {
         this.projectId = projectId;
@@ -48,3 +50,4 @@ public class Project {
         this.budgetCost = budgetCost;
     }
 }
+

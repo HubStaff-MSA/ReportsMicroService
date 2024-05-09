@@ -1,55 +1,38 @@
 package com.reportsMicroservice.demo.model.others;
 
+import com.reportsMicroservice.demo.repository.others.ProjectRepository;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @Getter
+@Setter
+@AllArgsConstructor
 public class Client {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "client_id")
     private Integer clientId;
-
-    @Column(name = "name", nullable = false)
     private String name;
-
-    @Column(name = "email", nullable = false, unique = true)
     private String email;
-
-    @Column(name = "phoneNumber")
     private String phoneNumber;
-
-    @Column(name = "address")
     private String address;
+    private List<Project> projects;
 
-    public Client(Integer clientId, String clientA, String mail, String number, String s) {
-        this.clientId = clientId;
-        this.name = clientA;
-        this.email = mail;
-        this.phoneNumber = number;
-        this.address = s;
+    // Method to add projects from ProjectRepository based on clientId
+//    public void addProjectsFromRepository(ProjectRepository projectRepository) {
+//        List<Project> allProjects = projectRepository.findAll();
+//        List<Project> clientProjects = new ArrayList<>();
+//
+//        for (Project project : allProjects) {
+//            if (project.getClientId().equals(this.clientId)) {
+//                clientProjects.add(project);
+//            }
+//        }
+//
+//        this.projects = clientProjects;
+//    }
 
-    }
-
-    // Getters and setters (omitted for brevity)
-
-    public void setClientId(Integer clientId) {
-        this.clientId = clientId;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 }

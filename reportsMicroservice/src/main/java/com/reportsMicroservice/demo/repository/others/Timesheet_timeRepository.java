@@ -49,6 +49,9 @@ public class Timesheet_timeRepository {
     }
 
 
-
-
+    public List<Timesheet_time> findByDateRange(LocalDate from, LocalDate to) {
+        return timesheettimes.stream()
+                .filter(timesheet_time -> timesheet_time.getDate().isAfter(from) && timesheet_time.getDate().isBefore(to))
+                .collect(java.util.stream.Collectors.toList());
+    }
 }

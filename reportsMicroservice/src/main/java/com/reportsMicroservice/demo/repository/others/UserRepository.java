@@ -5,7 +5,9 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Repository
@@ -33,4 +35,13 @@ public class UserRepository {
                 .findFirst()
                 .orElse(null);
     }
+
+    public List<User> findAllById(List<Integer> userIds) {
+        return users.stream()
+                .filter(user -> userIds.contains(user.getId()))
+                .collect(Collectors.toList());
+    }
+
+
+
 }
