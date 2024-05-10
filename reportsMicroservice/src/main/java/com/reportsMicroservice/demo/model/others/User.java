@@ -1,11 +1,8 @@
 package com.reportsMicroservice.demo.model.others;
 
-import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -19,16 +16,9 @@ public class User {
     private String fullName;
     private String email;
     private String password;
-
-    public enum UserRole {
-        USER, OWNER, ORGANIZATION_MANAGER, PROJECT_MANAGER
-    }
-
-
     private LocalDate joinDate;
     private Integer organizationId;
     private Integer projectId;
-
     //---------------------------------------------Employee fields---------------------------------------------
     private LocalDate hireDate;
     private double hourlyRate;
@@ -39,7 +29,6 @@ public class User {
     private Integer balanceTimeOff;
     private double totalHoursWorked;
     private double weeklyLimit;
-
     public User(Integer id, UserRole role, String fullName, String email, String password, LocalDate joinDate, Integer organizationId, Integer projectId) {
         this.id = id;
         this.role = role;
@@ -49,6 +38,10 @@ public class User {
         this.joinDate = joinDate;
         this.organizationId = organizationId;
         this.projectId = projectId;
+    }
+
+    public enum UserRole {
+        USER, OWNER, ORGANIZATION_MANAGER, PROJECT_MANAGER
     }
 
 

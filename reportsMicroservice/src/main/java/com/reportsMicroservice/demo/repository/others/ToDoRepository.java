@@ -1,6 +1,6 @@
 package com.reportsMicroservice.demo.repository.others;
+
 import com.reportsMicroservice.demo.model.others.ToDo;
-import com.reportsMicroservice.demo.model.others.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -18,6 +18,7 @@ public class ToDoRepository {
 
 
     }
+
     public ToDo findByUserId(Integer userId) {
         return todos.stream()
                 .filter(todo -> todo.getUserId().equals(userId))

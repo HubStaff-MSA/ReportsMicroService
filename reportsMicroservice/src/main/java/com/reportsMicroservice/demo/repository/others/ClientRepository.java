@@ -1,12 +1,8 @@
 package com.reportsMicroservice.demo.repository.others;
 
 import com.reportsMicroservice.demo.model.others.Client;
-import com.reportsMicroservice.demo.model.others.Payment;
-import com.reportsMicroservice.demo.model.others.Project;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 

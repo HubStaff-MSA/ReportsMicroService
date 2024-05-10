@@ -8,7 +8,6 @@ import com.reportsMicroservice.demo.repository.others.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -22,13 +21,11 @@ public class AmountsOwedReportService {
     private Timesheet_timeRepository Timesheet_timeRepository;
     @Autowired
     private UserRepository UserRepository;
-    private double getTotalHours(Timesheet_time timesheet) {
-        long minutes = java.time.Duration.between(timesheet.getStartTime(), timesheet.getEndTime()).toMinutes();
-        return minutes / 60.0;
-    }
 
-    public List<AmountsOwedReport> generateAmountsOwedReport(LocalDate from, LocalDate to) {
-        List<Timesheet_time> timesheets = Timesheet_timeRepository.findByDateRange(from, to);
+
+    public List<AmountsOwedReport> generateAmountsOwedReport() {
+        List<Timesheet_time> timesheets = Timesheet_timeRepository.findAll(); // Fetch all timesheets
+
         Map<Integer, List<Timesheet_time>> groupedTimesheets = timesheets.stream()
                 .collect(Collectors.groupingBy(Timesheet_time::getUserId));
 
@@ -43,7 +40,7 @@ public class AmountsOwedReportService {
                 double overtimeHours = Math.max(0, totalHours - weeklyLimit);
 
                 double amountOwed = regularHours * user.getHourlyRate() +
-                        overtimeHours * (user.getHourlyRate()* 1.5);
+                        overtimeHours * (user.getHourlyRate() * 1.5);
 
                 return new AmountsOwedReport(
                         user.getFullName(), user.getEmail(), user.getJoinDate(),
@@ -55,8 +52,10 @@ public class AmountsOwedReportService {
         }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
-
-
+    private double getTotalHours(Timesheet_time timesheet) {
+        // Implement logic to calculate total hours from Timesheet_time object
+        return timesheet.calculateDurationInHours(); // Example method to calculate duration
+    }
 
 
 }

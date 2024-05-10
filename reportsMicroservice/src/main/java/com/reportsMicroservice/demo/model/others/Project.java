@@ -1,15 +1,10 @@
 package com.reportsMicroservice.demo.model.others;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Getter
 @AllArgsConstructor
@@ -30,16 +25,6 @@ public class Project {
     private LocalDate budgetStartDate;
     private boolean budgetIncludeNonBillabeTime;
 
-    public enum BudgetType {
-        TotalCost,
-        TotalHours
-    }
-
-    public enum BudgetBasedOn {
-        BillRate,
-        PayRate
-    }
-
     public Project(Integer projectId, String projectName, boolean billable, boolean disableActivity, boolean disableIdleTime, Integer clientId, Double budgetCost) {
         this.projectId = projectId;
         this.projectName = projectName;
@@ -48,6 +33,16 @@ public class Project {
         this.disableIdleTime = disableIdleTime;
         this.clientId = clientId;
         this.budgetCost = budgetCost;
+    }
+
+    public enum BudgetType {
+        TotalCost,
+        TotalHours
+    }
+
+    public enum BudgetBasedOn {
+        BillRate,
+        PayRate
     }
 }
 

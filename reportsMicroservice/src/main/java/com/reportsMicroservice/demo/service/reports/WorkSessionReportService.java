@@ -8,21 +8,20 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
 public class WorkSessionReportService {
-        @Autowired
-        private ProjectRepository projectRepository;
-        @Autowired
-        private ClientRepository clientRepository;
-        @Autowired
-        private UserRepository userRepository;
-        @Autowired
-        private ToDoRepository toDoRepository;
-        @Autowired
-        private Timesheet_timeRepository timesheetRepository;
+    @Autowired
+    private ProjectRepository projectRepository;
+    @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ToDoRepository toDoRepository;
+    @Autowired
+    private Timesheet_timeRepository timesheetRepository;
 
 
     public List<WorkSessionReport> generateWorkSessionReports() {
@@ -65,6 +64,6 @@ public class WorkSessionReportService {
 
         return reportList;
     }
-    }
+}
 
 

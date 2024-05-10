@@ -8,9 +8,10 @@ import com.reportsMicroservice.demo.repository.others.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.stream.Collectors;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class PaymentsReportService {
@@ -21,16 +22,23 @@ public class PaymentsReportService {
     private PaymentRepository PaymentsRepository;
 
 
-    public List<PaymentsReport> generatePaymentsReport(LocalDate from, LocalDate to) {
-        List<Payment> payments = PaymentRepository.findByDateRange(from, to);
-        return payments.stream().collect(Collectors.groupingBy(Payment::getMemberId))
-                .entrySet().stream().map(entry -> {
-                    User user = UserRepository.findById(entry.getKey());
-                    double totalAmount = entry.getValue().stream()
-                            .mapToDouble(Payment::getAmount)
-                            .sum();
-                    return new PaymentsReport(user.getFullName(), "Direct", user.getJoinDate(), totalAmount);
-                }).collect(Collectors.toList());
+    public List<PaymentsReport> generatePaymentsReport() {
+        List<Payment> payments = PaymentRepository.findAll(); // Fetch all payments
+
+        Map<Integer, List<Payment>> groupedPayments = payments.stream()
+                .collect(Collectors.groupingBy(Payment::getMemberId));
+
+        return groupedPayments.entrySet().stream().map(entry -> {
+            User user = UserRepository.findById(entry.getKey());
+            if (user != null) {
+                double totalAmount = entry.getValue().stream()
+                        .mapToDouble(Payment::getAmount)
+                        .sum();
+                return new PaymentsReport(user.getFullName(), "Direct", user.getJoinDate(), totalAmount);
+            } else {
+                return null; // User with the specified member ID was not found
+            }
+        }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
 }

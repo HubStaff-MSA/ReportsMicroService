@@ -1,7 +1,6 @@
 package com.reportsMicroservice.demo.model.others;
 
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,15 +25,6 @@ public class Shift {
     private IssueStatus issueStatus;
 
 
-
-    public enum RepeatType {
-        NEVER, WEEKLY, BI_WEEKLY
-    }
-
-    public enum IssueStatus {
-        NOT_STARTED, ON_TIME, LATE, ABANDONED, MISSED
-    }
-
     public Shift(Integer shiftId, Integer employeeId, LocalDateTime startDatetime, LocalDateTime endDatetime, double minimumHours, RepeatType repeats, Date repeatUntilDate, IssueStatus issueStatus) {
         this.shiftId = shiftId;
         this.employeeId = employeeId;
@@ -44,5 +34,13 @@ public class Shift {
         this.repeats = repeats;
         this.repeatUntilDate = repeatUntilDate;
         this.issueStatus = issueStatus;
+    }
+
+    public enum RepeatType {
+        NEVER, WEEKLY, BI_WEEKLY
+    }
+
+    public enum IssueStatus {
+        NOT_STARTED, ON_TIME, LATE, ABANDONED, MISSED
     }
 }

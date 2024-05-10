@@ -1,18 +1,15 @@
 package com.reportsMicroservice.demo.service.reports;
 
-import com.reportsMicroservice.demo.model.others.*;
+import com.reportsMicroservice.demo.model.others.Client;
+import com.reportsMicroservice.demo.model.others.Payment;
+import com.reportsMicroservice.demo.model.others.Project;
 import com.reportsMicroservice.demo.model.reports.ClientBudgetsReport;
 import com.reportsMicroservice.demo.repository.others.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 
 @Service

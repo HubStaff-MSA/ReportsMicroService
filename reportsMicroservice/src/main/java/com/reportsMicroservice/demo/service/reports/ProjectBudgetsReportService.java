@@ -2,8 +2,6 @@ package com.reportsMicroservice.demo.service.reports;
 
 import com.reportsMicroservice.demo.model.others.Payment;
 import com.reportsMicroservice.demo.model.others.Project;
-import com.reportsMicroservice.demo.model.others.Timesheet_time;
-import com.reportsMicroservice.demo.model.others.User;
 import com.reportsMicroservice.demo.model.reports.ProjectBudgetsReport;
 import com.reportsMicroservice.demo.repository.others.PaymentRepository;
 import com.reportsMicroservice.demo.repository.others.ProjectRepository;
@@ -14,9 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class ProjectBudgetsReportService {

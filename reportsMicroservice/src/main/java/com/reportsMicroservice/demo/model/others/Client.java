@@ -1,14 +1,8 @@
 package com.reportsMicroservice.demo.model.others;
 
-import com.reportsMicroservice.demo.repository.others.ProjectRepository;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 @Getter
 @Setter

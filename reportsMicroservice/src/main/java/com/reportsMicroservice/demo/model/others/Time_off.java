@@ -1,6 +1,5 @@
 package com.reportsMicroservice.demo.model.others;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
