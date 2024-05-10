@@ -29,14 +29,19 @@ public class ReportsController {
     @Autowired
     private PaymentsReportService paymentsReportService;
 
-    @GetMapping("/worksession/user/{userId}")  // Changed from @PostMapping to @GetMapping
-    public ResponseEntity<WorkSessionReport> getWorkSessionReportByUserId(@PathVariable Integer userId) {
-        try {
-            WorkSessionReport report = workSessionReportService.generateWorkSessionReportByUserId(userId);
-            return ResponseEntity.ok(report);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();  // Handling case where user or report is not found
+    @Autowired
+    private WeeklyLimitReportService WeeklyLimitReportService;
+
+    @GetMapping("/worksession") // Endpoint to fetch work session reports for all users
+    public ResponseEntity<List<WorkSessionReport>> getAllWorkSessionReports() {
+        List<WorkSessionReport> reportList = workSessionReportService.generateWorkSessionReports();
+
+        // Check if the reportList is empty (no reports generated)
+        if (reportList.isEmpty()) {
+            return ResponseEntity.notFound().build(); // Return 404 if no reports are found
         }
+
+        return ResponseEntity.ok(reportList); // Return the list of reports
     }
 
     @GetMapping("/amounts-owed")
@@ -88,6 +93,17 @@ public class ReportsController {
             return ResponseEntity.internalServerError().build(); // Handle unexpected errors
         }
     }
+
+    @GetMapping("/weekly-limit") // Endpoint to fetch weekly limit report
+    public List<WeeklyLimitReport> getWeeklyLimitReport() {
+        // Call the service to generate the weekly limit report
+        List<WeeklyLimitReport> weeklyLimitReportList = WeeklyLimitReportService.generateWeeklyLimitReport();
+
+        // Optionally, you can add additional logic or validation here
+
+        return weeklyLimitReportList;
+    }
+
 
 
 

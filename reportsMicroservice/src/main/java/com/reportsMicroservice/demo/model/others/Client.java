@@ -19,7 +19,6 @@ public class Client {
     private String email;
     private String phoneNumber;
     private String address;
-    private List<Project> projects;
 
     // Method to add projects from ProjectRepository based on clientId
 //    public void addProjectsFromRepository(ProjectRepository projectRepository) {

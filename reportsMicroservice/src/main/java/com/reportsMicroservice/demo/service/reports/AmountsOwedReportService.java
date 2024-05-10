@@ -37,17 +37,17 @@ public class AmountsOwedReportService {
             if (optionalUser.isPresent()) {
                 User user = optionalUser.get();
 
-                double weeklyLimit = user.getWeeklyLimit() != null ? user.getWeeklyLimit().doubleValue() : 40.0; // Default to 40 if not specified
+                double weeklyLimit = user.getWeeklyLimit() != 0 ? user.getWeeklyLimit() : 40.0; // Default to 40 if not specified
                 double totalHours = entry.getValue().stream().mapToDouble(this::getTotalHours).sum();
                 double regularHours = Math.min(totalHours, weeklyLimit);
                 double overtimeHours = Math.max(0, totalHours - weeklyLimit);
 
-                double amountOwed = regularHours * user.getHourlyRate().doubleValue() +
-                        overtimeHours * (user.getHourlyRate().doubleValue() * 1.5);
+                double amountOwed = regularHours * user.getHourlyRate() +
+                        overtimeHours * (user.getHourlyRate()* 1.5);
 
                 return new AmountsOwedReport(
                         user.getFullName(), user.getEmail(), user.getJoinDate(),
-                        user.getHourlyRate().doubleValue(), regularHours, overtimeHours,
+                        user.getHourlyRate(), regularHours, overtimeHours,
                         totalHours, amountOwed);
             } else {
                 return null; // User with the specified ID was not found

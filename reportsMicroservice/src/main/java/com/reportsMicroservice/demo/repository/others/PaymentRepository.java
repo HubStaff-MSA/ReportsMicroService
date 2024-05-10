@@ -23,4 +23,8 @@ public class PaymentRepository {
                 .filter(payment -> payment.getFrom_date().isAfter(from) && payment.getFrom_date().isBefore(to))
                 .collect(java.util.stream.Collectors.toList());
     }
+
+    public List<Payment> findAll() {
+        return payments;
+    }
 }

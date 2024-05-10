@@ -1,17 +1,13 @@
 package com.reportsMicroservice.demo.service.reports;
 
-import com.reportsMicroservice.demo.model.others.Client;
-import com.reportsMicroservice.demo.model.others.Project;
-import com.reportsMicroservice.demo.model.others.Timesheet_time;
-import com.reportsMicroservice.demo.model.others.User;
+import com.reportsMicroservice.demo.model.others.*;
 import com.reportsMicroservice.demo.model.reports.ClientBudgetsReport;
-import com.reportsMicroservice.demo.repository.others.ClientRepository;
-import com.reportsMicroservice.demo.repository.others.Timesheet_timeRepository;
-import com.reportsMicroservice.demo.repository.others.UserRepository;
+import com.reportsMicroservice.demo.repository.others.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -27,64 +23,59 @@ public class ClientBudgetsReportService {
     @Autowired
     private UserRepository UserRepository;
     @Autowired
-    private ClientRepository ClientRepository;
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
+    @Autowired
+    private PaymentRepository paymentRepository;
 
     public List<ClientBudgetsReport> generateClientBudgetsReport() {
-        List<Client> clients = ClientRepository.findAll();
-        System.out.println("Clients: " + clients);
+        List<ClientBudgetsReport> reportList = new ArrayList<>();
 
-        return clients.stream().map(client -> {
-            double totalSpent = client.getProjects().stream()
-                    .mapToDouble(project -> calculateTotalSpentForProject(project.getProjectId()))
-                    .sum();
-            System.out.println("Total Spent: " + totalSpent);
+        List<Client> clients = clientRepository.findAll();
+        List<Payment> payments = paymentRepository.findAll();
 
-            double totalBudget = client.getProjects().stream()
-                    .mapToDouble(Project::getBudgetCost)
-                    .sum();
-            System.out.println("Total Budget: " + totalBudget);
+        for (Client client : clients) {
+            double totalSpent = calculateTotalSpent(client.getClientId(), payments);
+            double remainingBudget = getClientBudget(client.getClientId()) - totalSpent;
 
-            double remaining = totalBudget - totalSpent;
-            System.out.println("Remaining: " + remaining);
+            ClientBudgetsReport report = new ClientBudgetsReport(
+                    client.getName(),
+                    totalSpent,
+                    getClientBudget(client.getClientId()),
+                    remainingBudget);
 
-            return new ClientBudgetsReport(client.getName(), totalSpent, totalBudget, remaining);
-        }).collect(Collectors.toList());
+            reportList.add(report);
+        }
+
+        return reportList;
     }
 
+    // Helper method to calculate total spent for a client
+    private double calculateTotalSpent(Integer clientId, List<Payment> payments) {
+        double totalSpent = 0.0;
 
-    private double calculateTotalSpentForProject(Integer projectId) {
-        // Retrieve timesheets associated with the project
-        List<Timesheet_time> timesheets = Timesheet_timeRepository.findByProjectId(projectId);
-
-        // Extract user IDs from timesheets
-        List<Integer> userIds = timesheets.stream()
-                .map(Timesheet_time::getUserId)
-                .collect(Collectors.toList());
-
-        // Retrieve users based on the extracted user IDs
-        List<User> users = UserRepository.findAllById(userIds);
-
-        // Map users to user IDs for efficient lookup
-        Map<Integer, User> userMap = users.stream()
-                .collect(Collectors.toMap(User::getId, Function.identity()));
-
-        // Calculate total spent based on timesheet data and user hourly rates
-        double totalSpent = timesheets.stream()
-                .mapToDouble(timesheet -> {
-                    User user = userMap.get(timesheet.getUserId());
-                    if (user != null) {
-                        // Calculate cost based on hours worked and hourly rate
-                        return timesheet.calculateDurationInHours() * user.getHourlyRate().doubleValue();
-                    } else {
-                        return 0.0; // Default to 0 if user is not found (should not happen ideally)
-                    }
-                })
-                .sum();
+        for (Payment payment : payments) {
+            if (payment.getPayerId().equals(clientId)) {
+                totalSpent += payment.getAmount();
+            }
+        }
 
         return totalSpent;
     }
 
+    private double getClientBudget(Integer clientId) {
+        List<Project> projects = projectRepository.findAll();
+        double totalBudget = 0.0;
 
+        for (Project project : projects) {
+            if (project.getClientId().equals(clientId)) {
+                totalBudget += project.getBudgetCost();
+            }
+        }
 
-
+        return totalBudget;
+    }
 }

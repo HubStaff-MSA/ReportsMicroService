@@ -6,6 +6,7 @@ import com.reportsMicroservice.demo.repository.others.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,25 +25,45 @@ public class WorkSessionReportService {
         private Timesheet_timeRepository timesheetRepository;
 
 
+    public List<WorkSessionReport> generateWorkSessionReports() {
+        List<WorkSessionReport> reportList = new ArrayList<>();
 
-    public WorkSessionReport generateWorkSessionReportByUserId(Integer userId) {
-        User user = userRepository.findById(userId);
-        if (user == null) {
-            throw new IllegalArgumentException("User not found");
+        List<User> users = userRepository.findAll();
+
+        for (User user : users) {
+            Project project = projectRepository.findById(user.getProjectId());
+            if (project == null) {
+                continue; // Skip users without associated projects
+            }
+
+            Client client = clientRepository.findById(project.getClientId());
+            if (client == null) {
+                continue; // Skip users with projects not associated with a client
+            }
+
+            String memberName = user.getFullName();
+
+            ToDo toDo = toDoRepository.findByUserId(user.getId());
+            Timesheet_time timesheet = timesheetRepository.findByUserId(user.getId());
+
+            if (toDo == null || timesheet == null) {
+                continue; // Skip users without associated to-do or timesheet data
+            }
+
+            WorkSessionReport report = new WorkSessionReport(
+                    client.getName(),
+                    project.getProjectName(),
+                    memberName,
+                    toDo.getContent(),
+                    timesheet.isManual(),
+                    timesheet.getStartTime(),
+                    timesheet.getEndTime(),
+                    timesheet.calculateDurationInHours());
+
+            reportList.add(report);
         }
 
-        // Assuming the user is associated with a single project for simplicity
-        Project project = projectRepository.findById(user.getProjectId());
-        Client client = clientRepository.findById(project.getClientId());
-
-        // The user's name, since the report is specific to this user
-        String memberName = user.getFullName();
-
-        // Fetching ToDos and Timesheets specific to this user
-        ToDo toDo = toDoRepository.findByUserId(userId);
-        Timesheet_time timesheets = timesheetRepository.findByUserId(userId);
-
-        return new WorkSessionReport(client.getName(), project.getProjectName(), memberName,toDo.getContent(), timesheets.isManual(),timesheets.getStartTime(),timesheets.getEndTime(),timesheets.calculateDurationInHours());
+        return reportList;
     }
     }
 

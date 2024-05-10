@@ -31,15 +31,14 @@ public class User {
 
     //---------------------------------------------Employee fields---------------------------------------------
     private LocalDate hireDate;
-    private BigDecimal hourlyRate;
-    private BigDecimal salary;
-    private String employmentStatus;
+    private double hourlyRate;
+    private double salary;
     private String taxInfo;
     private Integer usedTimeOff;
     private Integer pendingTimeOff;
     private Integer balanceTimeOff;
-    private BigDecimal totalHoursWorked;
-    private BigDecimal weeklyLimit;
+    private double totalHoursWorked;
+    private double weeklyLimit;
 
     public User(Integer id, UserRole role, String fullName, String email, String password, LocalDate joinDate, Integer organizationId, Integer projectId) {
         this.id = id;
