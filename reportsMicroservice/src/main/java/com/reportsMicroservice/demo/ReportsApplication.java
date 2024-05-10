@@ -1,7 +1,5 @@
 package com.reportsMicroservice.demo;
 
-import com.reportsMicroservice.demo.command.ReportsMiniService;
-import com.reportsMicroservice.demo.service.reports.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
