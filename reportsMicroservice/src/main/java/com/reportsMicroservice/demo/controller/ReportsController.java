@@ -18,6 +18,12 @@ public class ReportsController {
     private WorkSessionReportService workSessionReportService;
 
     @Autowired
+    private TimeOffTransactionReportService timeoffTransactionReportService;
+
+    @Autowired
+    private TimeOffBalancesReportService timeoffBalancesReportService;
+
+    @Autowired
     private AmountsOwedReportService amountsOwedReportService;
 
     @Autowired
@@ -32,9 +38,29 @@ public class ReportsController {
     @Autowired
     private WeeklyLimitReportService WeeklyLimitReportService;
 
+
+
     @GetMapping("/worksession")
     public ResponseEntity<List<WorkSessionReport>> getAllWorkSessionReports() {
         List<WorkSessionReport> reportList = workSessionReportService.generateWorkSessionReports();
+        if (reportList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(reportList);
+    }
+
+    @GetMapping("/timeofftransaction")
+    public ResponseEntity<List<TimeOffTransactionReport>> getAllTimeOffTransactionReports() {
+        List<TimeOffTransactionReport> reportList = timeoffTransactionReportService.generateTimeOffTransactionReports();
+        if (reportList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(reportList);
+    }
+
+    @GetMapping("/timeoffbalances")
+    public ResponseEntity<List<TimeOffBalancesReport>> getAllTimeOffBalancesReports() {
+        List<TimeOffBalancesReport> reportList = timeoffBalancesReportService.generateTimeOffTransactionReports();
         if (reportList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
