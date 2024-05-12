@@ -11,7 +11,7 @@ import java.time.LocalTime;
 @Setter
 @AllArgsConstructor
 public class ShiftAttendanceReport {
-    private Integer userId;
+    private String member;
     private Shift.IssueStatus issue;
     private String shift;
     private LocalTime startTime;
