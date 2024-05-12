@@ -24,6 +24,9 @@ public class ReportsController {
     private TimeOffBalancesReportService timeoffBalancesReportService;
 
     @Autowired
+    private ShiftAttendanceReportService shiftAttendanceReportService;
+
+    @Autowired
     private AmountsOwedReportService amountsOwedReportService;
 
     @Autowired
@@ -61,6 +64,15 @@ public class ReportsController {
     @GetMapping("/timeoffbalances")
     public ResponseEntity<List<TimeOffBalancesReport>> getAllTimeOffBalancesReports() {
         List<TimeOffBalancesReport> reportList = timeoffBalancesReportService.generateTimeOffTransactionReports();
+        if (reportList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(reportList);
+    }
+
+    @GetMapping("/shiftattendance")
+    public ResponseEntity<List<ShiftAttendanceReport>> getAllshiftAttendanceReports() {
+        List<ShiftAttendanceReport> reportList = shiftAttendanceReportService.generateShiftAttendanceReports();
         if (reportList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
