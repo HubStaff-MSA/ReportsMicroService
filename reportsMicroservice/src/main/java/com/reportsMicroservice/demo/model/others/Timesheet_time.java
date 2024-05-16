@@ -1,10 +1,12 @@
 package com.reportsMicroservice.demo.model.others;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
@@ -14,22 +16,21 @@ import java.time.temporal.ChronoUnit;
 public class Timesheet_time {
 
     private Integer timesheetId;
+    private Integer organizationId;
     private Integer userId;
     private Integer projectId;
     private Integer todoId;
-    private LocalDate date;
-    private LocalTime startTime;
-    private LocalTime endTime;
-    private boolean billable;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate day;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime startTime;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime endTime;
+
+    private Long duration;
     private boolean manual;
-    private ActionEnum action;
-
-    public double calculateDurationInHours() {
-        return ChronoUnit.MINUTES.between(startTime, endTime) / 60.0;
-    }
-
-    public enum ActionEnum {
-        Add, Edit, Delete, None
-    }
 
 }

@@ -54,7 +54,7 @@ public class AmountsOwedReportService {
 
     private double getTotalHours(Timesheet_time timesheet) {
         // Implement logic to calculate total hours from Timesheet_time object
-        return timesheet.calculateDurationInHours(); // Example method to calculate duration
+        return timesheet.getDuration(); // Example method to calculate duration
     }
 
 

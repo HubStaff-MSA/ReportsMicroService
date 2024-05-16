@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
@@ -16,8 +17,8 @@ public class WorkSessionReport {
     private String memberName;
     private String todoDescription;
     private boolean isManual;
-    private LocalTime startTime;
-    private LocalTime endTime;
+    private LocalDateTime startTime;
+    private LocalDateTime endTime;
     private double duration;
     // private String activity;
 
