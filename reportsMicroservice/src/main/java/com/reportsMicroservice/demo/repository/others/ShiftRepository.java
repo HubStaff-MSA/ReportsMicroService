@@ -18,10 +18,17 @@ public class ShiftRepository {
         shifts.add(new Shift(3, 3, LocalDateTime.of(2021, 1, 1, 8, 0), LocalDateTime.of(2021, 1, 1, 16, 0), 5.0, Shift.RepeatType.WEEKLY, Date.valueOf("2021-05-05"), Shift.IssueStatus.ON_TIME));
     }
 
-    public List<Shift> findByUserId(Integer userId) {
+//    public List<Shift> findByUserId(Integer userId) {
+//        return shifts.stream()
+//                .filter(shift -> shift.getEmployeeId().equals(userId))
+//                .collect(java.util.stream.Collectors.toList());
+//    }
+
+    public Shift findByUserId(Integer userId){
         return shifts.stream()
                 .filter(shift -> shift.getEmployeeId().equals(userId))
-                .collect(java.util.stream.Collectors.toList());
+                .findFirst()
+                .orElse(null);
     }
 
     public Shift findById(Integer shiftId) {
