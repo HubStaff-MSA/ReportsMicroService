@@ -57,7 +57,7 @@ public class WorkSessionReportService {
                     timesheet.isManual(),
                     timesheet.getStartTime(),
                     timesheet.getEndTime(),
-                    timesheet.calculateDurationInHours());
+                    timesheet.getDuration());
 
             reportList.add(report);
         }

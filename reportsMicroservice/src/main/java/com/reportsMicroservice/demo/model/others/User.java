@@ -29,6 +29,7 @@ public class User {
     private Integer balanceTimeOff;
     private double totalHoursWorked;
     private double weeklyLimit;
+
     public User(Integer id, UserRole role, String fullName, String email, String password, LocalDate joinDate, Integer organizationId, Integer projectId) {
         this.id = id;
         this.role = role;

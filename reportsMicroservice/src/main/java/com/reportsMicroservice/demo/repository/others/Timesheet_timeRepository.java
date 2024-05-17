@@ -1,9 +1,11 @@
 package com.reportsMicroservice.demo.repository.others;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.reportsMicroservice.demo.model.others.Timesheet_time;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +16,9 @@ public class Timesheet_timeRepository {
     List<Timesheet_time> timesheettimes = new ArrayList<>();
 
     public Timesheet_timeRepository() {
-        timesheettimes.add(new Timesheet_time(1, 1, 1, 1, LocalDate.of(2021, 01, 01), LocalTime.of(1, 1), LocalTime.of(1, 1), true, false, Timesheet_time.ActionEnum.None));
-        timesheettimes.add(new Timesheet_time(2, 2, 2, 2, LocalDate.of(2021, 01, 02), LocalTime.of(2, 2), LocalTime.of(2, 2), true, false, Timesheet_time.ActionEnum.None));
-        timesheettimes.add(new Timesheet_time(3, 3, 3, 3, LocalDate.of(2021, 01, 03), LocalTime.of(3, 3), LocalTime.of(3, 3), true, false, Timesheet_time.ActionEnum.None));
+        timesheettimes.add(new Timesheet_time(1, 1, 1, 1,1, LocalDate.of(2021, 01, 01), LocalDateTime.of(2021, 1, 1, 15, 0), LocalDateTime.of(2021, 5, 15, 15, 0), 5L, false));
+        timesheettimes.add(new Timesheet_time(2, 2, 2, 2,2, LocalDate.of(2021, 01, 01), LocalDateTime.of(2021, 1, 1, 15, 0), LocalDateTime.of(2021, 5, 15, 15, 0), 5L, false));
+        timesheettimes.add(new Timesheet_time(3, 3, 3, 3,3, LocalDate.of(2021, 01, 01), LocalDateTime.of(2021, 1, 1, 15, 0), LocalDateTime.of(2021, 5, 15, 15, 0), 5L, false));
     }
 
     //find timesheet by user id (not a list)
@@ -50,7 +52,7 @@ public class Timesheet_timeRepository {
 
     public List<Timesheet_time> findByDateRange(LocalDate from, LocalDate to) {
         return timesheettimes.stream()
-                .filter(timesheet_time -> timesheet_time.getDate().isAfter(from) && timesheet_time.getDate().isBefore(to))
+                .filter(timesheet_time -> timesheet_time.getDay().isAfter(from) && timesheet_time.getDay().isBefore(to))
                 .collect(java.util.stream.Collectors.toList());
     }
 

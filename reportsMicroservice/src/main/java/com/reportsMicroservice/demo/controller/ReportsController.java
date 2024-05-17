@@ -70,14 +70,14 @@ public class ReportsController {
         return ResponseEntity.ok(reportList);
     }
 
-    @GetMapping("/shiftattendance")
-    public ResponseEntity<List<ShiftAttendanceReport>> getAllshiftAttendanceReports() {
-        List<ShiftAttendanceReport> reportList = shiftAttendanceReportService.generateShiftAttendanceReports();
-        if (reportList.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(reportList);
-    }
+//    @GetMapping("/shiftattendance")
+//    public ResponseEntity<List<ShiftAttendanceReport>> getAllshiftAttendanceReports() {
+//        List<ShiftAttendanceReport> reportList = shiftAttendanceReportService.generateShiftAttendanceReports();
+//        if (reportList.isEmpty()) {
+//            return ResponseEntity.notFound().build();
+//        }
+//        return ResponseEntity.ok(reportList);
+//    }
 
     @GetMapping("/amounts-owed")
     public ResponseEntity<List<AmountsOwedReport>> getAmountsOwedReport() {

@@ -1,6 +1,5 @@
 package com.reportsMicroservice.demo.command;
 
-import com.reportsMicroservice.demo.model.reports.WeeklyLimitReport;
 import com.reportsMicroservice.demo.service.reports.*;
 
 public class ReportsMiniService {
