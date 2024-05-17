@@ -1,6 +1,7 @@
 package com.reportsMicroservice.demo.repository.others;
 
 import com.reportsMicroservice.demo.model.others.Payment;
+import com.reportsMicroservice.demo.model.others.Time_off;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -26,5 +27,12 @@ public class PaymentRepository {
 
     public static List<Payment> findAll() {
         return payments;
+    }
+
+    public Payment findByUserId(Integer userId) {
+        return payments.stream()
+                .filter(time_off -> time_off.getMemberId().equals(userId))
+                .findFirst()
+                .orElse(null);
     }
 }

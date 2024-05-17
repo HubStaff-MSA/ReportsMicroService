@@ -27,6 +27,12 @@ public class ReportsController {
     private ShiftAttendanceReportService shiftAttendanceReportService;
 
     @Autowired
+    private ManualTimeEditReportService manualTimeEditReportService;
+
+    @Autowired
+    private TimeAndActivityReportService timeAndActivityReportService;
+
+    @Autowired
     private AmountsOwedReportService amountsOwedReportService;
 
     @Autowired
@@ -70,14 +76,32 @@ public class ReportsController {
         return ResponseEntity.ok(reportList);
     }
 
-//    @GetMapping("/shiftattendance")
-//    public ResponseEntity<List<ShiftAttendanceReport>> getAllshiftAttendanceReports() {
-//        List<ShiftAttendanceReport> reportList = shiftAttendanceReportService.generateShiftAttendanceReports();
-//        if (reportList.isEmpty()) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        return ResponseEntity.ok(reportList);
-//    }
+    @GetMapping("/shiftattendance")
+    public ResponseEntity<List<ShiftAttendanceReport>> getAllShiftAttendanceReports() {
+        List<ShiftAttendanceReport> reportList = shiftAttendanceReportService.generateShiftAttendanceReports();
+        if (reportList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(reportList);
+    }
+
+    @GetMapping("/manualtimeedit")
+    public ResponseEntity<List<ManualTimeEditReport>> getAllManualTimeEditReports() {
+        List<ManualTimeEditReport> reportList = manualTimeEditReportService.generateManualTimeEditReports();
+        if (reportList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(reportList);
+    }
+
+    @GetMapping("/timeandactivity")
+    public ResponseEntity<List<TimeAndActivityReport>> getAllTimeAndActivityReports() {
+        List<TimeAndActivityReport> reportList = timeAndActivityReportService.generateTimeAndActivityReports();
+        if (reportList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(reportList);
+    }
 
     @GetMapping("/amounts-owed")
     public ResponseEntity<List<AmountsOwedReport>> getAmountsOwedReport() {

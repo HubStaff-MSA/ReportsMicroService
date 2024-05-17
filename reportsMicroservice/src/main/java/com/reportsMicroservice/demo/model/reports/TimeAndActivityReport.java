@@ -11,11 +11,11 @@ public class TimeAndActivityReport {
     private String project;
     private String member;
     private double regularHours;
-    private double overtime;
+    //private double overtime;
     private double timeoff;
     private double totalHours;
     private String activity;
-    private double manualHours;
+    //private double manualHours;
     private double totalSpent;
-    private double regularSpent;
+    //private double regularSpent;
 }
