@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -28,20 +29,22 @@ public class ClientBudgetsReportService {
     @Autowired
     private PaymentRepository paymentRepository;
 
-    public List<ClientBudgetsReport> generateClientBudgetsReport() {
+    public List<ClientBudgetsReport> generateClientBudgetsReport(Integer clientID) {
         List<ClientBudgetsReport> reportList = new ArrayList<>();
 
-        List<Client> clients = clientRepository.findAll();
-        List<Payment> payments = paymentRepository.findAll();
+        Optional<Client> optionalClient = clientRepository.findById(clientID);
+        if (optionalClient.isPresent()) {
+            Client client = optionalClient.get();
+            List<Payment> payments = paymentRepository.findAll(); // Assuming all payments are still needed to compute
 
-        for (Client client : clients) {
             double totalSpent = calculateTotalSpent(client.getClientId(), payments);
-            double remainingBudget = getClientBudget(client.getClientId()) - totalSpent;
+            double clientBudget = client.getBudgetCost(); // Directly using the budgetCost attribute
+            double remainingBudget = clientBudget - totalSpent;
 
             ClientBudgetsReport report = new ClientBudgetsReport(
                     client.getName(),
                     totalSpent,
-                    getClientBudget(client.getClientId()),
+                    clientBudget,
                     remainingBudget);
 
             reportList.add(report);
@@ -52,27 +55,10 @@ public class ClientBudgetsReportService {
 
     // Helper method to calculate total spent for a client
     private double calculateTotalSpent(Integer clientId, List<Payment> payments) {
-        double totalSpent = 0.0;
-
-        for (Payment payment : payments) {
-            if (payment.getPayerId().equals(clientId)) {
-                totalSpent += payment.getAmount();
-            }
-        }
-
-        return totalSpent;
+        return payments.stream()
+                .filter(payment -> payment.getPayerId().equals(clientId))
+                .mapToDouble(Payment::getAmount)
+                .sum();
     }
 
-    private double getClientBudget(Integer clientId) {
-        List<Project> projects = projectRepository.findAll();
-        double totalBudget = 0.0;
-
-        for (Project project : projects) {
-            if (project.getClientId().equals(clientId)) {
-                totalBudget += project.getBudgetCost();
-            }
-        }
-
-        return totalBudget;
-    }
 }

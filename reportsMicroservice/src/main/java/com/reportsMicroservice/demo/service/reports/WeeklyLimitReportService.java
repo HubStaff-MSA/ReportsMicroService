@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class WeeklyLimitReportService {
@@ -16,12 +17,12 @@ public class WeeklyLimitReportService {
     private UserRepository userRepository;
 
     // Method to generate weekly limit report for all users
-    public List<WeeklyLimitReport> generateWeeklyLimitReport() {
+    public List<WeeklyLimitReport> generateWeeklyLimitReport(Integer userID) {
         List<WeeklyLimitReport> reportList = new ArrayList<>();
 
-        List<User> users = userRepository.findAll();
-
-        for (User user : users) {
+        Optional<User> optionalUser = userRepository.findById(userID);
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
             if (user.getWeeklyLimit() > 0) {
                 double totalHoursWorked = user.getTotalHoursWorked();
                 double weeklyLimit = user.getWeeklyLimit();

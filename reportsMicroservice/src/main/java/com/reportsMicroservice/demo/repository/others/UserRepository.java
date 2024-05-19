@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Repository
@@ -32,11 +33,10 @@ public class UserRepository {
                 .collect(Collectors.toList());
     }
 
-    public User findById(Integer userId) {
+    public Optional<User> findById(Integer userId) {
         return users.stream()
                 .filter(user -> user.getId().equals(userId))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
 
     public List<User> findAllById(List<Integer> userIds) {

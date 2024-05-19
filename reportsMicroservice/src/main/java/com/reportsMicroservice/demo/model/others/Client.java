@@ -4,28 +4,39 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
 public class Client {
     private Integer clientId;
+    //-------
     private String name;
     private String email;
     private String phoneNumber;
     private String address;
+    //-------
+    private List<Project> projects;
+    private boolean billable;
+    private BudgetType budgetType;
+    private BudgetBasedOn budgetBasedOn;
+    //------
+    private Double budgetCost;
+    private Double budgetNotifyAt;
+    private Date budgetStartDate;
+    private boolean budgetIncludeNonBillabeTime;
+    private Integer organizationId;
 
-    // Method to add projects from ProjectRepository based on clientId
-//    public void addProjectsFromRepository(ProjectRepository projectRepository) {
-//        List<Project> allProjects = projectRepository.findAll();
-//        List<Project> clientProjects = new ArrayList<>();
-//
-//        for (Project project : allProjects) {
-//            if (project.getClientId().equals(this.clientId)) {
-//                clientProjects.add(project);
-//            }
-//        }
-//
-//        this.projects = clientProjects;
-//    }
+    public enum BudgetBasedOn {
+        BillRate,
+        PayRate
+    }
+
+    public enum BudgetType {
+        TotalCost,
+        TotalHours
+    }
 
 }

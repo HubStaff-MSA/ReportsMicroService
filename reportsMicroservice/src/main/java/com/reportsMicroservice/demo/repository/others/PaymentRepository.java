@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class PaymentRepository {
@@ -26,5 +27,12 @@ public class PaymentRepository {
 
     public static List<Payment> findAll() {
         return payments;
+    }
+
+
+    public List<Payment> findByUserId(Integer userId) {
+        return payments.stream()
+                .filter(payment -> payment.getMemberId().equals(userId))
+                .collect(Collectors.toList());
     }
 }

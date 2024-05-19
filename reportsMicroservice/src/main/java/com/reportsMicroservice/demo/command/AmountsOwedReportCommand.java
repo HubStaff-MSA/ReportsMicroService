@@ -8,14 +8,17 @@ import java.util.List;
 
 public class AmountsOwedReportCommand implements Command {
     private AmountsOwedReportService service;
+    private Integer userId;
 
-    public AmountsOwedReportCommand(AmountsOwedReportService service) {
+    public AmountsOwedReportCommand(AmountsOwedReportService service, Integer userId) {
         this.service = service;
+        this.userId= userId;
     }
 
     @Override
     public void execute() {
-        List<AmountsOwedReport> reports = service.generateAmountsOwedReport();
+        List<AmountsOwedReport> reports = service.generateAmountsOwedReport(userId);
+        reports.forEach(report -> System.out.println(report));
     }
 
 }

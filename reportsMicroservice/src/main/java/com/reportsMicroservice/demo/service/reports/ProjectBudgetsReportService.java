@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProjectBudgetsReportService {
@@ -27,12 +28,14 @@ public class ProjectBudgetsReportService {
     @Autowired
     private PaymentRepository PaymentRepository;
 
-    public List<ProjectBudgetsReport> generateProjectBudgetsReport() {
+    public List<ProjectBudgetsReport> generateProjectBudgetsReport(Integer projectID) {
         List<ProjectBudgetsReport> reportList = new ArrayList<>();
-        List<Project> projects = projectRepository.findAll();
-        List<Payment> payments = PaymentRepository.findAll();
 
-        for (Project project : projects) {
+        Optional<Project> optionalProject = projectRepository.findById(projectID);
+        if (optionalProject.isPresent()) {
+            Project project = optionalProject.get();
+            List<Payment> payments = PaymentRepository.findAll(); // Assuming all payments are still needed
+
             double totalSpent = calculateTotalSpent(project.getProjectId(), payments);
             double remainingBudget = project.getBudgetCost() - totalSpent;
 
@@ -46,7 +49,6 @@ public class ProjectBudgetsReportService {
         }
 
         return reportList;
-
     }
 
     // Helper method to calculate total spent for a project

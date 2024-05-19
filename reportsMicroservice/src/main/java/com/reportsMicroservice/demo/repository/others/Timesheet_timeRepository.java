@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Repository
 
@@ -16,17 +18,18 @@ public class Timesheet_timeRepository {
     List<Timesheet_time> timesheettimes = new ArrayList<>();
 
     public Timesheet_timeRepository() {
-        timesheettimes.add(new Timesheet_time(1, 1, 1, 1,1, LocalDate.of(2021, 01, 01), LocalDateTime.of(2021, 1, 1, 15, 0), LocalDateTime.of(2021, 5, 15, 15, 0), 5L, false));
-        timesheettimes.add(new Timesheet_time(2, 2, 2, 2,2, LocalDate.of(2021, 01, 01), LocalDateTime.of(2021, 1, 1, 15, 0), LocalDateTime.of(2021, 5, 15, 15, 0), 5L, false));
-        timesheettimes.add(new Timesheet_time(3, 3, 3, 3,3, LocalDate.of(2021, 01, 01), LocalDateTime.of(2021, 1, 1, 15, 0), LocalDateTime.of(2021, 5, 15, 15, 0), 5L, false));
+        // Assuming Timesheet_time constructor is like:
+        // Timesheet_time(timesheetId, organizationId, userId, projectId, todoId, day, startTime, endTime, duration, isManual)
+        timesheettimes.add(new Timesheet_time(1, 1, 1, 1, 1, LocalDate.of(2021, 1, 1), LocalDateTime.of(2021, 1, 1, 15, 0), LocalDateTime.of(2021, 1, 1, 18, 0), 3L, false));
+        timesheettimes.add(new Timesheet_time(2, 2, 2, 2, 2, LocalDate.of(2021, 1, 2), LocalDateTime.of(2021, 1, 2, 9, 0), LocalDateTime.of(2021, 1, 2, 17, 0), 8L, false));
+        timesheettimes.add(new Timesheet_time(3, 3, 3, 3, 3, LocalDate.of(2021, 1, 3), LocalDateTime.of(2021, 1, 3, 10, 0), LocalDateTime.of(2021, 1, 3, 15, 0), 5L, false));
     }
 
     //find timesheet by user id (not a list)
-    public Timesheet_time findByUserId(Integer userId) {
+    public List<Timesheet_time> findByUserId(Integer userId) {
         return timesheettimes.stream()
-                .filter(timesheet_time -> timesheet_time.getUserId().equals(userId))
-                .findFirst()
-                .orElse(null);
+                .filter(timesheet_time -> userId.equals(timesheet_time.getUserId()))
+                .collect(Collectors.toList());
     }
 
     public Timesheet_time findById(Integer id) {

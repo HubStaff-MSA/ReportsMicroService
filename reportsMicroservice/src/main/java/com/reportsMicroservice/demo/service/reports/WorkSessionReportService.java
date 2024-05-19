@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -24,46 +25,50 @@ public class WorkSessionReportService {
     private Timesheet_timeRepository timesheetRepository;
 
 
-    public List<WorkSessionReport> generateWorkSessionReports() {
+    public List<WorkSessionReport> generateWorkSessionReports(Integer userId) {
         List<WorkSessionReport> reportList = new ArrayList<>();
+        Optional<User> userOptional = userRepository.findById(userId);
 
-        List<User> users = userRepository.findAll();
+        if (!userOptional.isPresent()) {
+            return reportList;  // Return empty list if user is not found
+        }
 
-        for (User user : users) {
-            Project project = projectRepository.findById(user.getProjectId());
-            if (project == null) {
-                continue; // Skip users without associated projects
+        User user = userOptional.get();
+        Optional<Project> projectOptional = projectRepository.findById(user.getProjectId());
+        if (!projectOptional.isPresent()) {
+            return reportList;  // Return empty list if project is not found
+        }
+
+        Project project = projectOptional.get();
+        Optional<Client> clientOptional = clientRepository.findById(project.getClientId());
+        if (!clientOptional.isPresent()) {
+            return reportList;  // Return empty list if client is not found
+        }
+
+        Client client = clientOptional.get();
+        List<ToDo> todos = toDoRepository.findByUserId(userId);  // Assume this returns a list
+        List<Timesheet_time> timesheets = timesheetRepository.findByUserId(userId);
+
+        // Process each combination of timesheet and todo
+        for (Timesheet_time timesheet : timesheets) {
+            for (ToDo toDo : todos) {
+                WorkSessionReport report = new WorkSessionReport(
+                        client.getName(),
+                        project.getProjectName(),
+                        user.getFullName(),
+                        toDo.getContent(),
+                        timesheet.isManual(),
+                        timesheet.getStartTime(),
+                        timesheet.getEndTime(),
+                        timesheet.getDuration());
+
+                reportList.add(report);
             }
-
-            Client client = clientRepository.findById(project.getClientId());
-            if (client == null) {
-                continue; // Skip users with projects not associated with a client
-            }
-
-            String memberName = user.getFullName();
-
-            ToDo toDo = toDoRepository.findByUserId(user.getId());
-            Timesheet_time timesheet = timesheetRepository.findByUserId(user.getId());
-
-            if (toDo == null || timesheet == null) {
-                continue; // Skip users without associated to-do or timesheet data
-            }
-
-            WorkSessionReport report = new WorkSessionReport(
-                    client.getName(),
-                    project.getProjectName(),
-                    memberName,
-                    toDo.getContent(),
-                    timesheet.isManual(),
-                    timesheet.getStartTime(),
-                    timesheet.getEndTime(),
-                    timesheet.getDuration());
-
-            reportList.add(report);
         }
 
         return reportList;
     }
+
 }
 
 
