@@ -42,7 +42,7 @@ public class ShiftAttendanceReportService {
                     shift.getMinimumHours(),
                     user.getTotalHoursWorked()
 
-                    );
+            );
             reportList.add(report);
         }
         return reportList;

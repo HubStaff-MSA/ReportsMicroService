@@ -8,13 +8,15 @@ import java.util.List;
 
 public class ClientBudgetsReportCommand implements Command {
     private ClientBudgetsReportService service;
+    private Integer clientId;
 
     public ClientBudgetsReportCommand(ClientBudgetsReportService service) {
         this.service = service;
+        this.clientId = clientId;
     }
 
     @Override
     public void execute() {
-        List<ClientBudgetsReport> reports = service.generateClientBudgetsReport();
+        List<ClientBudgetsReport> reports = service.generateClientBudgetsReport(clientId);
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,23 +23,22 @@ public class PaymentsReportService {
     private PaymentRepository PaymentsRepository;
 
 
-    public List<PaymentsReport> generatePaymentsReport() {
-        List<Payment> payments = PaymentRepository.findAll(); // Fetch all payments
+    public List<PaymentsReport> generatePaymentsReport(Integer userId) {
+        // Fetch payments for the specified userId
+        List<Payment> payments = PaymentsRepository.findByUserId(userId); // Assuming this method exists in your repository
 
-        Map<Integer, List<Payment>> groupedPayments = payments.stream()
-                .collect(Collectors.groupingBy(Payment::getMemberId));
+        Optional<User> userOptional = UserRepository.findById(userId);
+        if (!userOptional.isPresent()) {
+            return List.of(); // Return an empty list if the user is not found
+        }
 
-        return groupedPayments.entrySet().stream().map(entry -> {
-            User user = UserRepository.findById(entry.getKey());
-            if (user != null) {
-                double totalAmount = entry.getValue().stream()
-                        .mapToDouble(Payment::getAmount)
-                        .sum();
-                return new PaymentsReport(user.getFullName(), "Direct", user.getJoinDate(), totalAmount);
-            } else {
-                return null; // User with the specified member ID was not found
-            }
-        }).filter(Objects::nonNull).collect(Collectors.toList());
+        User user = userOptional.get();
+        double totalAmount = payments.stream()
+                .mapToDouble(Payment::getAmount)
+                .sum();
+
+        PaymentsReport report = new PaymentsReport(user.getFullName(), "Direct", user.getJoinDate(), totalAmount);
+        return List.of(report); // Return a list containing a single report
     }
 
 }

@@ -45,8 +45,8 @@ public class ReportsMiniService {
     }
 
     //amounts owed report
-    public void generateAmountsOwedReport(AmountsOwedReportService service) {
-        AmountsOwedReportCommand command = new AmountsOwedReportCommand(service);
+    public void generateAmountsOwedReport(AmountsOwedReportService service, Integer userId) {
+        AmountsOwedReportCommand command = new AmountsOwedReportCommand(service, userId);
         commandInvoker.setCommand(command);
         commandInvoker.executeCommand();
     }

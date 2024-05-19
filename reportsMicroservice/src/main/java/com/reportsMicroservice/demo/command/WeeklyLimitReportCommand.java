@@ -7,14 +7,16 @@ import java.util.List;
 
 public class WeeklyLimitReportCommand implements Command {
     private WeeklyLimitReportService service;
+    private Integer userId;
 
     public WeeklyLimitReportCommand(WeeklyLimitReportService service) {
         this.service = service;
+        this.userId = userId;
     }
 
     @Override
     public void execute() {
-        List<WeeklyLimitReport> reports = service.generateWeeklyLimitReport();
+        List<WeeklyLimitReport> reports = service.generateWeeklyLimitReport(userId);
     }
 }
 

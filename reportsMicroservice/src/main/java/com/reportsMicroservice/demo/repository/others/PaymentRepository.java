@@ -1,13 +1,13 @@
 package com.reportsMicroservice.demo.repository.others;
 
 import com.reportsMicroservice.demo.model.others.Payment;
-import com.reportsMicroservice.demo.model.others.Time_off;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class PaymentRepository {
@@ -29,10 +29,10 @@ public class PaymentRepository {
         return payments;
     }
 
-    public Payment findByUserId(Integer userId) {
+
+    public List<Payment> findByUserId(Integer userId) {
         return payments.stream()
-                .filter(time_off -> time_off.getMemberId().equals(userId))
-                .findFirst()
-                .orElse(null);
+                .filter(payment -> payment.getMemberId().equals(userId))
+                .collect(Collectors.toList());
     }
 }

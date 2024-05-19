@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ProjectRepository {
@@ -21,12 +22,12 @@ public class ProjectRepository {
     }
 
     //find by project id
-    public Project findById(Integer projectId) {
+    public Optional<Project> findById(Integer projectId) {
         return projects.stream()
                 .filter(project -> project.getProjectId().equals(projectId))
-                .findFirst()
-                .orElse(null);
+                .findFirst();
     }
+
 
     //find by client id
     public Project findByClientId(Integer clientId) {
@@ -35,6 +36,8 @@ public class ProjectRepository {
                 .findFirst()
                 .orElse(null);
     }
+
+
 
     public List<Project> findAll() {
         return projects;

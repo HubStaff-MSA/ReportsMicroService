@@ -8,10 +8,7 @@ import com.reportsMicroservice.demo.repository.others.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,39 +20,28 @@ public class AmountsOwedReportService {
     private UserRepository UserRepository;
 
 
-    public List<AmountsOwedReport> generateAmountsOwedReport() {
-        List<Timesheet_time> timesheets = Timesheet_timeRepository.findAll(); // Fetch all timesheets
 
-        Map<Integer, List<Timesheet_time>> groupedTimesheets = timesheets.stream()
-                .collect(Collectors.groupingBy(Timesheet_time::getUserId));
 
-        return groupedTimesheets.entrySet().stream().map(entry -> {
-            Optional<User> optionalUser = Optional.ofNullable(UserRepository.findById(entry.getKey()));
-            if (optionalUser.isPresent()) {
-                User user = optionalUser.get();
+    public List<AmountsOwedReport> generateAmountsOwedReport(Integer userId) {
+        Optional<User> optionalUser = UserRepository.findById(userId);
 
-                double weeklyLimit = user.getWeeklyLimit() != 0 ? user.getWeeklyLimit() : 40.0; // Default to 40 if not specified
-                double totalHours = entry.getValue().stream().mapToDouble(this::getTotalHours).sum();
-                double regularHours = Math.min(totalHours, weeklyLimit);
-                double overtimeHours = Math.max(0, totalHours - weeklyLimit);
-
-                double amountOwed = regularHours * user.getHourlyRate() +
-                        overtimeHours * (user.getHourlyRate() * 1.5);
-
-                return new AmountsOwedReport(
-                        user.getFullName(), user.getEmail(), user.getJoinDate(),
-                        user.getHourlyRate(), regularHours, overtimeHours,
-                        totalHours, amountOwed);
-            } else {
-                return null; // User with the specified ID was not found
+        return optionalUser.map(user -> {
+            List<Timesheet_time> timesheets = Timesheet_timeRepository.findByUserId(userId);
+            if (timesheets.isEmpty()) {
+                return Collections.<AmountsOwedReport>emptyList();  // Explicitly typing the returned list
             }
-        }).filter(Objects::nonNull).collect(Collectors.toList());
+
+            double weeklyLimit = Math.max(user.getWeeklyLimit(), 40.0);
+            double totalHours = timesheets.stream().mapToDouble(Timesheet_time::getDuration).sum();
+            double regularHours = Math.min(totalHours, weeklyLimit);
+            double overtimeHours = Math.max(0, totalHours - weeklyLimit);
+            double amountOwed = regularHours * user.getHourlyRate() + overtimeHours * (user.getHourlyRate() * 1.5);
+
+            AmountsOwedReport report = new AmountsOwedReport(
+                    user.getFullName(), user.getEmail(), user.getJoinDate(),
+                    user.getHourlyRate(), regularHours, overtimeHours,
+                    totalHours, amountOwed);
+            return Collections.singletonList(report);
+        }).orElse(Collections.emptyList());
+        }
     }
-
-    private double getTotalHours(Timesheet_time timesheet) {
-        // Implement logic to calculate total hours from Timesheet_time object
-        return timesheet.getDuration(); // Example method to calculate duration
-    }
-
-
-}

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class ToDoRepository {
@@ -19,11 +20,10 @@ public class ToDoRepository {
 
     }
 
-    public ToDo findByUserId(Integer userId) {
+    public List<ToDo> findByUserId(Integer userId) {
         return todos.stream()
-                .filter(todo -> todo.getUserId().equals(userId))
-                .findFirst()
-                .orElse(null);
+                .filter(toDo -> toDo.getUserId().equals(userId))
+                .collect(Collectors.toList());
     }
 
 
