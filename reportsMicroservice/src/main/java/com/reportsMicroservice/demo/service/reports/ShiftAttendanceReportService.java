@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -22,31 +24,29 @@ public class ShiftAttendanceReportService {
     private ShiftRepository shiftRepository;
 
 
-    public List<ShiftAttendanceReport> generateShiftAttendanceReports() {
-        List<ShiftAttendanceReport> reportList = new ArrayList<>();
-
-        List<User> users = userRepository.findAll();
-
-
-
-        for (User user : users) {
-            Shift shift = shiftRepository.findByUserId(user.getId());
-
-
-            // member, issue, shift, startTime, requiredHrs, actualHrs
-            ShiftAttendanceReport report = new ShiftAttendanceReport(
-                    user.getFullName(),
-                    shift.getIssueStatus(),
-                    shift.getStartDatetime().toString() + "   -  " + shift.getEndDatetime().toString(),
-                    shift.getStartDatetime().toLocalTime(),
-                    shift.getMinimumHours(),
-                    user.getTotalHoursWorked()
-
-            );
-            reportList.add(report);
+    public List<ShiftAttendanceReport> generateShiftAttendanceReports(Integer userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (!optionalUser.isPresent()) {
+            return Collections.emptyList(); // Return empty list if user is not found
         }
-        return reportList;
-    }
+        User user = optionalUser.get();
 
+        Shift shift = shiftRepository.findByUserId(user.getId());
+        if (shift == null) {
+            return Collections.emptyList(); // Return empty list if no shift is found
+        }
+
+        // Create a shift attendance report
+        ShiftAttendanceReport report = new ShiftAttendanceReport(
+                user.getFullName(),
+                shift.getIssueStatus(),
+                shift.getStartDatetime().toString() + " - " + shift.getEndDatetime().toString(),
+                shift.getStartDatetime().toLocalTime(),
+                shift.getMinimumHours(),
+                user.getTotalHoursWorked()
+        );
+
+        return Collections.singletonList(report); // Return a list containing only this report
+    }
 
 }

@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TimeOffBalancesReportService {
@@ -20,24 +22,28 @@ public class TimeOffBalancesReportService {
     private UserRepository userRepository;
 
     //policy , used, pending, balance, reason
-    public List<TimeOffBalancesReport> generateTimeOffTransactionReports() {
-        List<TimeOffBalancesReport> reportList = new ArrayList<>();
-        List<User> users = userRepository.findAll();
+    public List<TimeOffBalancesReport> generateTimeOffTransactionReports(Integer userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (!optionalUser.isPresent()) {
+            return Collections.emptyList(); // Return empty list if the user is not found
+        }
+        User user = optionalUser.get();
 
-        for(User user: users){
-            Time_off timeoff = timeOffRepository.findByUserId(user.getId());
-
-            TimeOffBalancesReport report = new TimeOffBalancesReport(
-              timeoff.getPolicy(),
-                    user.getUsedTimeOff(),
-                    user.getPendingTimeOff(),
-                    user.getBalanceTimeOff(),
-              timeoff.getReason());
-
-            reportList.add(report);
+        Time_off timeOff = timeOffRepository.findByUserId(user.getId());
+        if (timeOff == null) {
+            return Collections.emptyList(); // Return empty list if no time off records are found for the user
         }
 
-        return reportList;
+        // Create a time off transaction report for the user
+        TimeOffBalancesReport report = new TimeOffBalancesReport(
+                timeOff.getPolicy(),
+                user.getUsedTimeOff(),
+                user.getPendingTimeOff(),
+                user.getBalanceTimeOff(),
+                timeOff.getReason()
+        );
+
+        return Collections.singletonList(report); // Return a list containing only this report
     }
 
 }
