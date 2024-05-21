@@ -44,6 +44,10 @@ public class ReportsController {
     @Autowired
     private WeeklyLimitReportService WeeklyLimitReportService;
 
+
+    @Autowired
+    private TimeAndActivityReportService timeAndActivityReportService;
+
     @GetMapping("/worksession/{userID}")
     public ResponseEntity<List<WorkSessionReport>> getAllWorkSessionReports(@PathVariable("userID") Integer userID) {
         List<WorkSessionReport> reportList = workSessionReportService.generateWorkSessionReports(userID);
@@ -54,8 +58,8 @@ public class ReportsController {
     }
 
     @GetMapping("/timeofftransaction/{userID}")
-    public ResponseEntity<List<TimeOffTransactionReport>> getAllTimeOffTransactionReports() {
-        List<TimeOffTransactionReport> reportList = timeoffTransactionReportService.generateTimeOffTransactionReports();
+    public ResponseEntity<List<TimeOffTransactionReport>> getAllTimeOffTransactionReports(@PathVariable("userID") Integer userID){
+        List<TimeOffTransactionReport> reportList = timeoffTransactionReportService.generateTimeOffTransactionReports(userID);
         if (reportList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -63,8 +67,8 @@ public class ReportsController {
     }
 
     @GetMapping("/timeoffbalances/{userID}")
-    public ResponseEntity<List<TimeOffBalancesReport>> getAllTimeOffBalancesReports() {
-        List<TimeOffBalancesReport> reportList = timeoffBalancesReportService.generateTimeOffTransactionReports();
+    public ResponseEntity<List<TimeOffBalancesReport>> getAllTimeOffBalancesReports(@PathVariable("userID") Integer userID){
+        List<TimeOffBalancesReport> reportList = timeoffBalancesReportService.generateTimeOffTransactionReports(userID);
         if (reportList.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
@@ -132,14 +136,25 @@ public class ReportsController {
         return ResponseEntity.ok(report);
     }
 
-    //    @GetMapping("/shiftattendance")
-//    public ResponseEntity<List<ShiftAttendanceReport>> getAllshiftAttendanceReports() {
-//        List<ShiftAttendanceReport> reportList = shiftAttendanceReportService.generateShiftAttendanceReports();
-//        if (reportList.isEmpty()) {
-//            return ResponseEntity.notFound().build();
-//        }
-//        return ResponseEntity.ok(reportList);
-//    }
+    @GetMapping("/shiftattendance/{userID}")
+    public ResponseEntity<List<ShiftAttendanceReport>> getAllShiftAttendanceReports(@PathVariable("userID") Integer userID ){
+        List<ShiftAttendanceReport> reportList = shiftAttendanceReportService.generateShiftAttendanceReports(userID);
+        if (reportList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(reportList);
+    }
+
+    @GetMapping("/timeandactivity/{userID}")
+    public ResponseEntity<List<TimeAndActivityReport>> getAllTimeAndActivityReports(
+            @PathVariable("userID") Integer userID
+    ) {
+        List<TimeAndActivityReport> reportList = timeAndActivityReportService.generateTimeAndActivityReports(userID);
+        if (reportList.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(reportList);
+    }
 
 
 }

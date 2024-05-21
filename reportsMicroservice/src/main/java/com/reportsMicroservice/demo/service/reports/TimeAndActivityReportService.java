@@ -1,19 +1,15 @@
 package com.reportsMicroservice.demo.service.reports;
 
-import com.reportsMicroservice.demo.model.others.Project;
-import com.reportsMicroservice.demo.model.others.Time_off;
-import com.reportsMicroservice.demo.model.others.User;
-import com.reportsMicroservice.demo.model.reports.ManualTimeEditReport;
+import com.reportsMicroservice.demo.model.others.*;
 import com.reportsMicroservice.demo.model.reports.TimeAndActivityReport;
-import com.reportsMicroservice.demo.repository.others.PaymentRepository;
-import com.reportsMicroservice.demo.repository.others.ProjectRepository;
-import com.reportsMicroservice.demo.repository.others.Time_offRepository;
-import com.reportsMicroservice.demo.repository.others.UserRepository;
+import com.reportsMicroservice.demo.repository.others.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TimeAndActivityReportService {
@@ -29,33 +25,50 @@ public class TimeAndActivityReportService {
     @Autowired
     private PaymentRepository paymentRepository;
 
-    public List<TimeAndActivityReport> generateTimeAndActivityReports() {
-        List<TimeAndActivityReport> reportList = new ArrayList<>();
+    @Autowired
+    private Timesheet_timeRepository timesheet_timeRepository;
 
-        List<User> users = userRepository.findAll();
-
-        for (User user : users) {
-            Project project = projectRepository.findById(user.getProjectId());
-            if (project == null) {
-                continue; // Skip users without associated projects
-            }
-
-            Time_off timeoff = timeOffRepository.findByUserId(user.getId());
-
-
-
-            //project , member , regularHours , overtime , timeoff , totalHours , activity, manual, totalSpent, regularSpent
-            TimeAndActivityReport report = new TimeAndActivityReport(
-                    project.getProjectName(),
-                    user.getFullName(),
-                    0.0,
-                    timeoff.calculateDuration(),
-                    user.getTotalHoursWorked(),
-                    "activity",
-                    paymentRepository.findByUserId(user.getId()).getAmount()
-            );
-            reportList.add(report);
+    public List<TimeAndActivityReport> generateTimeAndActivityReports(Integer userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (!optionalUser.isPresent()) {
+            return Collections.emptyList(); // Return empty list if user is not found
         }
-        return reportList;
+        User user = optionalUser.get();
+
+        Optional<Project> optionalProject = projectRepository.findById(user.getProjectId());
+        if (!optionalProject.isPresent()) {
+            return Collections.emptyList(); // Return empty list if project is not found
+        }
+        Project project = optionalProject.get();
+
+        Time_off timeOff = timeOffRepository.findByUserId(user.getId());
+        double timeOffDuration = (timeOff != null) ? timeOff.calculateDuration() : 0.0;
+
+        List<Timesheet_time> timesheets = timesheet_timeRepository.findByUserId(userId);
+        double totalHours = timesheets.stream()
+                .mapToDouble(Timesheet_time::getDuration)
+                .sum();
+        double regularHours = Math.min(totalHours, user.getWeeklyLimit());
+        double overtime = Math.max(0, totalHours - user.getWeeklyLimit());
+
+        List<Payment> payments = paymentRepository.findByUserId(user.getId());
+        double totalSpent = payments.stream()
+                .mapToDouble(Payment::getAmount)
+                .sum();
+
+        TimeAndActivityReport report = new TimeAndActivityReport(
+                project.getProjectName(),
+                user.getFullName(),
+                regularHours,
+                overtime,
+                timeOffDuration,
+                totalHours,
+                    "Description Test", // Placeholder or fetch from a real source
+                totalHours, // Assuming manualHours are equivalent to totalHours; adjust as necessary
+                totalSpent,
+                regularHours * user.getHourlyRate() // Assuming regularSpent is calculated like this
+        );
+
+        return Collections.singletonList(report);
     }
 }
