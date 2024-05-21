@@ -40,7 +40,17 @@ public class RabbitMQConfig {
     @Bean
     public Queue financeQueue()  {return new Queue("financeQueue", false);}
     @Bean
-    public Queue reportsQueue()  {return new Queue("reportsQueue", false);}
+    public Queue project_reportsQueue()  {return new Queue("project_reportsQueue", false);}
+    @Bean
+    public Queue todo_reportsQueue()  {return new Queue("todo_reportsQueue", false);}
+    @Bean
+    public Queue client_reportsQueue()  {return new Queue("client_reportsQueue", false);}
+    @Bean
+    public Queue timetrack_reportsQueue()  {return new Queue("timetrack_reportsQueue", false);}
+    @Bean
+    public Queue user_reportsQueue()  {return new Queue("user_reportsQueue", false);}
+    @Bean
+    public Queue payment_reportsQueue()  {return new Queue("payment_reportsQueue", false);}
     @Bean
     public Queue userQueue()  {return new Queue("userQueue", false);}
     @Bean

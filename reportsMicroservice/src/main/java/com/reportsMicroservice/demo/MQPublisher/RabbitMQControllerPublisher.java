@@ -21,8 +21,8 @@ public class RabbitMQControllerPublisher {
         this.rabbitMQService = rabbitMQService;
     }
 
-    @PostMapping("/sendCommand")
-    public String sendCommand(@RequestBody CommandSender commandSender) {
+    @PostMapping("/sendCommandProject")
+    public String sendCommandProject (@RequestBody CommandSender commandSender) {
         try {
             rabbitMQService.sendMessage("commandQueueProjects", commandSender);
             return "Message sent to commandQueue: " + commandSender;
@@ -31,13 +31,35 @@ public class RabbitMQControllerPublisher {
         }
     }
 
-//    @PostMapping("/sendCommand")
-//    public String sendCommand(@RequestBody CommandSender commandSender) {
-//        try {
-//            rabbitMQService.sendMessage("commandQueueProjects", commandSender);
-//            return "Message sent to commandQueue: " + commandSender;
-//        } catch (Exception e) {
-//            return "Failed to send message: " + e.getMessage();
-//        }
-//    }
+    @PostMapping("/sendCommandTimeTrack")
+    public String sendCommandTimeTrack(@RequestBody CommandSender commandSender) {
+        try {
+            rabbitMQService.sendMessage("commandQueueTimeTrack", commandSender);
+            return "Message sent to commandQueue: " + commandSender;
+        } catch (Exception e) {
+            return "Failed to send message: " + e.getMessage();
+        }
+    }
+
+    @PostMapping("/sendCommandUser")
+    public String sendCommandUser(@RequestBody CommandSender commandSender) {
+        try {
+            rabbitMQService.sendMessage("commandQueueUser", commandSender);
+            return "Message sent to commandQueue: " + commandSender;
+        } catch (Exception e) {
+            return "Failed to send message: " + e.getMessage();
+        }
+    }
+
+    @PostMapping("/sendCommandFinance")
+    public String sendCommandFinance(@RequestBody CommandSender commandSender) {
+        try {
+            rabbitMQService.sendMessage("commandQueueFinance", commandSender);
+            return "Message sent to commandQueue: " + commandSender;
+        } catch (Exception e) {
+            return "Failed to send message: " + e.getMessage();
+        }
+    }
+
+
 }
