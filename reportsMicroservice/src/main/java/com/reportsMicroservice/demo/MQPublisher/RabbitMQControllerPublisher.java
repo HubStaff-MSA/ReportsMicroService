@@ -29,4 +29,14 @@ public class RabbitMQControllerPublisher {
             return "Failed to send message: " + e.getMessage();
         }
     }
+
+//    @PostMapping("/sendCommand")
+//    public String sendCommand(@RequestBody CommandSender commandSender) {
+//        try {
+//            rabbitMQService.sendMessage("commandQueueProjects", commandSender);
+//            return "Message sent to commandQueue: " + commandSender;
+//        } catch (Exception e) {
+//            return "Failed to send message: " + e.getMessage();
+//        }
+//    }
 }
