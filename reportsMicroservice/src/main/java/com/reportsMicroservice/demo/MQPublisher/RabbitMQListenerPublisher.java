@@ -1,8 +1,12 @@
 package com.reportsMicroservice.demo.MQPublisher;
 
 import com.reportsMicroservice.demo.dto.*;
+import com.reportsMicroservice.demo.service.reports.ReportsService;
+import org.apache.catalina.User;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class RabbitMQListenerPublisher {
@@ -13,52 +17,77 @@ public class RabbitMQListenerPublisher {
     private TrackTimeDTO trackTime;
     private PaymentDTO Payment;
 
-    @RabbitListener(queues = "timetrack_reportsQueue")
-    public void receiveMessage(TrackTimeDTO trackTime) {
+    private ReportsService reportservice;
+
+    @RabbitListener(queues = {"timetrack_reportsQueue", "todo_reportsQueue", "project_reportsQueue", "user_reportsQueue", "client_reportsQueue"})
+    public void workSessionReport(List<TrackTimeDTO> trackTime , List<ToDoDTO> todo, List<ProjectDTO> project, UserDTO user , ClientDTO client) {
         System.out.println("Received TrackTime message:");
-        System.out.println("ID: " + trackTime.getId());
-        System.out.println("User ID: " + trackTime.getUserId());
-        System.out.println("Start Time: " + trackTime.getStartTime());
-        System.out.println("End Time: " + trackTime.getEndTime());
+//        System.out.println("ID: " + trackTime.getId());
+//        System.out.println("User ID: " + trackTime.getUserId());
+//        System.out.println("Start Time: " + trackTime.getStartTime());
+//        System.out.println("End Time: " + trackTime.getEndTime());
+        reportservice.generateWorkSessionReports(user, project, client, todo, trackTime);
     }
 
-    @RabbitListener(queues = "project_reportsQueue")
-    public void receiveMessage(ProjectDTO project) {
-        System.out.println("Received Project message:");
-        System.out.println("ID: " + project.getProjectId());
-        System.out.println("Name: " + project.getProjectId());
+    @RabbitListener(queues = {"timetrack_reportsQueue", "project_reportsQueue", "user_reportsQueue", "payment_reportQueue"})
+    public void timeAndActivityReport(List<TrackTimeDTO> trackTime , List<PaymentDTO> payments, List<ProjectDTO> project, UserDTO user ) {
+        System.out.println("Received TrackTime message:");
+//        System.out.println("ID: " + trackTime.getId());
+//        System.out.println("User ID: " + trackTime.getUserId());
+//        System.out.println("Start Time: " + trackTime.getStartTime());
+//        System.out.println("End Time: " + trackTime.getEndTime());
+        reportservice.generateTimeAndActivityReports(user, project, trackTime, payments);
     }
 
-    @RabbitListener(queues = "todo_reportsQueue")
-    public void receiveMessage(ToDoDTO toDo) {
-        System.out.println("Received ToDo message:");
-        System.out.println("Name: " + toDo.getTitle());
-        System.out.println("Description: " + toDo.getDescription());
+    @RabbitListener(queues =  "user_reportsQueue")
+    public void weeklyLimitReport( UserDTO user ) {
+        System.out.println("Received TrackTime message:");
+//        System.out.println("ID: " + trackTime.getId());
+//        System.out.println("User ID: " + trackTime.getUserId());
+//        System.out.println("Start Time: " + trackTime.getStartTime());
+//        System.out.println("End Time: " + trackTime.getEndTime());
+        reportservice.generateWeeklyLimitReport(user);
     }
 
-    @RabbitListener(queues = "client_reportsQueue")
-    public void receiveMessage(ClientDTO client) {
-        System.out.println("Received Client message:");
-        System.out.println("ID: " + client.getClientId());
-        System.out.println("Name: " + client.getClientName());
+    @RabbitListener(queues = { "project_reportsQueue", "payment_reportQueue"})
+    public void projectBudgetReport( ProjectDTO project, List<PaymentDTO> payments) {
+        System.out.println("Received TrackTime message:");
+//        System.out.println("ID: " + trackTime.getId());
+//        System.out.println("User ID: " + trackTime.getUserId());
+//        System.out.println("Start Time: " + trackTime.getStartTime());
+//        System.out.println("End Time: " + trackTime.getEndTime());
+        reportservice.generateProjectBudgetsReport(project, payments);
     }
 
-    @RabbitListener(queues = "payment_reportsQueue")
-    public void receiveMessage(PaymentDTO payment) {
-        System.out.println("Received Payment message:");
-        System.out.println("ID: " + payment.getPaymentID());
-        System.out.println("Amount: " + payment.getAmount());
-        System.out.println("User ID: " + payment.getMemberId());
-        System.out.println("Project ID: " + payment.getProjectId());
-        System.out.println("Payer ID: " + payment.getPayerId());
+    @RabbitListener(queues = { "client_reportsQueue", "payment_reportsQueue"})
+    public void clientBudgetReport( ClientDTO client, List<PaymentDTO> payments) {
+        System.out.println("Received TrackTime message:");
+//        System.out.println("ID: " + trackTime.getId());
+//        System.out.println("User ID: " + trackTime.getUserId());
+//        System.out.println("Start Time: " + trackTime.getStartTime());
+//        System.out.println("End Time: " + trackTime.getEndTime());
+        reportservice.generateClientBudgetsReport(client, payments);
     }
 
-    @RabbitListener(queues = "user_reportsQueue")
-    public void receiveMessage(UserDTO user) {
-        System.out.println("Received User message:");
-        System.out.println("ID: " + user.getId());
-        System.out.println("Name: " + user.getFullName());
-        System.out.println("Email: " + user.getWorkEmail());
+    @RabbitListener(queues = {"user_reportsQueue", "payment_reportsQueue"})
+    public void paymentReport( UserDTO user , List<PaymentDTO> payments) {
+        System.out.println("Received TrackTime message:");
+//        System.out.println("ID: " + trackTime.getId());
+//        System.out.println("User ID: " + trackTime.getUserId());
+//        System.out.println("Start Time: " + trackTime.getStartTime());
+//        System.out.println("End Time: " + trackTime.getEndTime());
+        reportservice.generatePaymentsReport(user, payments);
+    }
+
+
+    @RabbitListener(queues = {"timetrack_reportsQueue", "user_reportsQueue"})
+    public void amountOwedReport(List<TrackTimeDTO> trackTime ,   UserDTO user) {
+        System.out.println("Received TrackTime message:");
+//        System.out.println("ID: " + trackTime.getId());
+//        System.out.println("User ID: " + trackTime.getUserId());
+//        System.out.println("Start Time: " + trackTime.getStartTime());
+//        System.out.println("End Time: " + trackTime.getEndTime());
+        reportservice.generateAmountsOwedReport(user, trackTime);
     }
 
 
