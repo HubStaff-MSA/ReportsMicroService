@@ -12,11 +12,9 @@ import java.util.List;
 @Setter
 public class ProjectDTO implements Serializable {
 
-    private Integer id;
+    private Integer projectId;
     private String projectName;
-    private Integer organizationId;
-//    private List<Integer> employees;
-    //////////////////////////////////
-    private Double BudgetCost;
+    private Integer clientId;
+    private double BudgetCost;
 
 }

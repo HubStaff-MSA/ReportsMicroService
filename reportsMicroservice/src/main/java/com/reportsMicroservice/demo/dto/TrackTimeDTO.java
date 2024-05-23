@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -19,19 +20,26 @@ import java.time.LocalDateTime;
 @Entity
 public class TrackTimeDTO implements Serializable {
 
-    @Id
-    @GeneratedValue
     private Integer id;
 
+    private int organizationID;
 
     private Integer userId;
 
+    private String userName;
+
+    private String project;
+
+    private String to_do;
+
     private LocalDateTime startTime;
 
-    @Column(
-            insertable = false,
-            updatable = true
-    )
     private LocalDateTime endTime;
+
+    private LocalDate day; // Adding the new column for day
+
+    private Long duration;
+
+    private float manual;
 
 }

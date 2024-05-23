@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PaymentsReport {
     private String memberName;
-    private String paymentType;
     private LocalDate paidOn;
     private Double amount;
 }

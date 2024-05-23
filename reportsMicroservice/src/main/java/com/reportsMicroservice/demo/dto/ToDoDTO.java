@@ -9,8 +9,9 @@ import lombok.Setter;
 @Setter
 public class ToDoDTO {
 
-    private Integer todoId;
-    private String content;
+    //private Integer todoId;
+    private String title;
+    private String description;
     private Integer userId;  //Assignee
 
 }

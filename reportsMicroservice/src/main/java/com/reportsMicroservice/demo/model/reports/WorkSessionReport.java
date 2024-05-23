@@ -16,7 +16,6 @@ public class WorkSessionReport {
     private String projectName;
     private String memberName;
     private String todoDescription;
-    private boolean isManual;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private double duration;

@@ -12,9 +12,7 @@ public class TimeAndActivityReport {
     private String member;
     private double regularHours;
     private double overtime;
-    private double timeoff;
     private double totalHours;
-    private String activity;
     private double manualHours;
     private double totalSpent;
     private double regularSpent;
