@@ -34,7 +34,7 @@ public class RabbitMQControllerPublisher {
     @PostMapping("/sendCommandTimeTrack")
     public String sendCommandTimeTrack(@RequestBody CommandSender commandSender) {
         try {
-            rabbitMQService.sendMessage("commandQueueTimeTrack", commandSender);
+            rabbitMQService.sendMessage("commandQueue", commandSender);
             return "Message sent to commandQueue: " + commandSender;
         } catch (Exception e) {
             return "Failed to send message: " + e.getMessage();
