@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
+
 public class TrackTimeDTO implements Serializable {
 
     private Integer id;
