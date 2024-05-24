@@ -1,14 +1,14 @@
 package com.reportsMicroservice.demo.controller;
 
+import com.reportsMicroservice.demo.commands.Command;
+import com.reportsMicroservice.demo.commands.CommandInvoker;
+
 import com.reportsMicroservice.demo.model.reports.*;
 import com.reportsMicroservice.demo.service.reports.*;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -16,7 +16,19 @@ import java.util.logging.Logger;
 @RestController
 @RequestMapping("/api/reports")
 public class ReportsController {
+    @GetMapping("/test")
+    public ResponseEntity<String> testApi() {
+        return ResponseEntity.ok("API is working");
+    }
 
+//    @GetMapping("/work-session")
+//    public ResponseEntity<List<WorkSessionReport>> generateWorkSessionReports() {
+//        List<WorkSessionReport> reportList = reportsService.generateWorkSessionReports(null, null, null, null, null);
+//        if (reportList.isEmpty()) {
+//            return ResponseEntity.notFound().build();
+//        }
+//        return ResponseEntity.ok(reportList);
+//    }
 //    @Autowired
 //    private WorkSessionReportService workSessionReportService;
 //
