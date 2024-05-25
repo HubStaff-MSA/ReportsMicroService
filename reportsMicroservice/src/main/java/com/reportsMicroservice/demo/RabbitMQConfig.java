@@ -31,8 +31,11 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue commandQueue() {
-        return new Queue("commandQueueProjects", true);
+        return new Queue("commandQueueProjects", false);
     } //I get the requests/commands from here... any service will send its command and payload here
+    public Queue commandQueueTrackTime() {
+        return new Queue("commandQueueTimeTracking", false);
+    }
     @Bean
     public Queue command2Queue() {
         return new Queue("commandQueue", false);
