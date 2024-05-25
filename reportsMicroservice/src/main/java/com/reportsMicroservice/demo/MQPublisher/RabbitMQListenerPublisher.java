@@ -90,19 +90,20 @@ public class RabbitMQListenerPublisher {
 //        reportservice.generateAmountsOwedReport(user, trackTime);
 //    }
 
-    public class TrackTimeListener {
+
 
         @RabbitListener(queues = "timetrack_reportsQueue")
-        public void test(List<TrackTimeDTO> trackTimes, UserDTO user) {
+        public void test(List<TT_dto> trackTimes) {
             System.out.println("Received TrackTime messages:");
+            System.out.println(trackTimes);
 
-            for (TrackTimeDTO trackTime : trackTimes) {
-                System.out.println("ID: " + trackTime.getId());
+            for (TT_dto trackTime : trackTimes) {
+                System.out.println("ID: " + trackTime.getDuration());
                 System.out.println("User ID: " + trackTime.getUserId());
                 System.out.println("Start Time: " + trackTime.getStartTime());
                 System.out.println("End Time: " + trackTime.getEndTime());
             }
-        }
+
 
 
     }}
