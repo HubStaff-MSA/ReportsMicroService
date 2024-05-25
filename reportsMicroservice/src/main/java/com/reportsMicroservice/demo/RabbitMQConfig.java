@@ -60,7 +60,7 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue timetrack_reportsQueue() {
-        return new Queue("T_R_Queue", false);
+        return new Queue("TT_R_Queue", false);
     }
 
     @Bean
