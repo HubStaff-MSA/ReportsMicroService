@@ -90,7 +90,7 @@ public class RabbitMQListenerPublisher {
 //    }
 
 
-    @RabbitListener(queues = "timetrack_reportsQueue")
+    @RabbitListener(queues = "T_R_Queue")
     public void test(List<TT_dto> trackTimes) {
         System.out.println("Received TrackTime messages:");
         System.out.println(trackTimes);
@@ -101,7 +101,19 @@ public class RabbitMQListenerPublisher {
             System.out.println("Start Time: " + trackTime.getStartTime());
             System.out.println("End Time: " + trackTime.getEndTime());
         }
+    }
 
+    @RabbitListener(queues = "P_R_Queue")
+    public void testProject(List<PMtoReportsProjectDTO> projects) {
+        System.out.println("Received Project messages:");
+        System.out.println(projects);
 
+        for (PMtoReportsProjectDTO project : projects) {
+            System.out.println("ID: " + project.getProjectId());
+            System.out.println("Project Name: " + project.getProjectName());
+            System.out.println("Client Id: " + project.getClientId());
+            System.out.println("Budget Cost: " + project.getBudgetCost());
+
+        }
     }
 }
