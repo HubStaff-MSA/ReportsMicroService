@@ -3,11 +3,6 @@ package com.reportsMicroservice.demo.repository.others;
 
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 @Repository
 
 public class Time_offRepository {

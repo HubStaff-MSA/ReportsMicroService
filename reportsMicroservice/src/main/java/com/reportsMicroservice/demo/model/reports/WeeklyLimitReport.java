@@ -1,12 +1,16 @@
 package com.reportsMicroservice.demo.model.reports;
 
+import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
+@Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class WeeklyLimitReport {
     private Integer userId;
     private String fullName;

@@ -1,6 +1,5 @@
 package com.reportsMicroservice.demo.dto;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,11 +40,11 @@ public class TrackTimeDTO implements Serializable {
 
     private float manual;
 
-    public void setId(Long id) {
-        this.id = Math.toIntExact(id);
-    }
-
     public Integer getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = Math.toIntExact(id);
     }
 }

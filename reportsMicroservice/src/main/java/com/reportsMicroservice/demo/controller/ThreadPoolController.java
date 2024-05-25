@@ -24,7 +24,7 @@ public class ThreadPoolController {
             taskExecutor.setCorePoolSize(maxThreadCount);
             taskExecutor.setMaxPoolSize(maxThreadCount);
             taskExecutor.setQueueCapacity(maxThreadCount * 2);
-            return ResponseEntity.ok("Max thread count updated successfully"+taskExecutor.getMaxPoolSize());
+            return ResponseEntity.ok("Max thread count updated successfully" + taskExecutor.getMaxPoolSize());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("An error occurred while updating max thread count: " + e.getMessage());

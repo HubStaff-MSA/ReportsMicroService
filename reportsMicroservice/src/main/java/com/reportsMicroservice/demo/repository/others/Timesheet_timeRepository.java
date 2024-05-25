@@ -1,15 +1,6 @@
 package com.reportsMicroservice.demo.repository.others;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 

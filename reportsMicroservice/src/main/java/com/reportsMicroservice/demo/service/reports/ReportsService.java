@@ -2,15 +2,34 @@ package com.reportsMicroservice.demo.service.reports;
 
 import com.reportsMicroservice.demo.dto.*;
 import com.reportsMicroservice.demo.model.reports.*;
-import com.reportsMicroservice.demo.repository.others.*;
+import com.reportsMicroservice.demo.repository.reports.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class ReportsService {
+
+    @Autowired
+    private WorkSessionReportRepository workSessionReportRepository;
+
+    @Autowired
+    private TimeAndActivityReportRepository timeAndActivityReportRepository;
+
+    @Autowired
+    private WeeklyLimitReportRepository weeklyLimitReportRepository;
+
+    @Autowired
+    private ProjectBudgetsReportRepository projectBudgetsReportRepository;
+
+    @Autowired
+    private ClientBudgetsReportRepository clientBudgetsReportRepository;
+
+    @Autowired
+    private PaymentsReportRepository paymentsReportRepository;
+
+    @Autowired
+    private AmountsOwedReportRepository amountsOwedReportRepository;
 
 
     /////////////////////////////////// GENERATE WORK SESSION REPORTS ///////////////////////////////////
@@ -38,6 +57,7 @@ public class ReportsService {
                                 timesheet.getDuration());
 
                         reportList.add(report);
+                        workSessionReportRepository.save(report); // Save the report
                     }
                 }
             }
@@ -75,6 +95,7 @@ public class ReportsService {
                 );
 
                 reportList.add(report);
+                timeAndActivityReportRepository.save(report); // Save the report
 
             }
         }
@@ -87,20 +108,21 @@ public class ReportsService {
     public List<WeeklyLimitReport> generateWeeklyLimitReport(UserDTO user) {
         List<WeeklyLimitReport> reportList = new ArrayList<>();
 
-            if (user.getWeeklyLimit() > 0) {
-                double totalHoursWorked = user.getTotalHoursWorked();
-                double weeklyLimit = user.getWeeklyLimit();
+        if (user.getWeeklyLimit() > 0) {
+            double totalHoursWorked = user.getTotalHoursWorked();
+            double weeklyLimit = user.getWeeklyLimit();
 
-                WeeklyLimitReport report = new WeeklyLimitReport(
-                        user.getId(),
-                        user.getFullName(),
-                        totalHoursWorked,
-                        weeklyLimit,
-                        calculatePercentageUsed(totalHoursWorked, weeklyLimit),
-                        calculateRemainingHours(totalHoursWorked, weeklyLimit));
+            WeeklyLimitReport report = new WeeklyLimitReport(
+                    user.getId(),
+                    user.getFullName(),
+                    totalHoursWorked,
+                    weeklyLimit,
+                    calculatePercentageUsed(totalHoursWorked, weeklyLimit),
+                    calculateRemainingHours(totalHoursWorked, weeklyLimit));
 
-                reportList.add(report);
-            }
+            reportList.add(report);
+            weeklyLimitReportRepository.save(report); // Save the report
+        }
 
 
         return reportList;
@@ -121,19 +143,20 @@ public class ReportsService {
 
     //////////////////////////////////// Project Budgets Report ////////////////////////////////////
 
-  public List<ProjectBudgetsReport> generateProjectBudgetsReport(ProjectDTO project, List<PaymentDTO> payments) {
+    public List<ProjectBudgetsReport> generateProjectBudgetsReport(ProjectDTO project, List<PaymentDTO> payments) {
         List<ProjectBudgetsReport> reportList = new ArrayList<>();
 
-            double totalSpent = calculateTotalSpent(project.getProjectId(), payments);
-            double remainingBudget = project.getBudgetCost() - totalSpent;
+        double totalSpent = calculateTotalSpent(project.getProjectId(), payments);
+        double remainingBudget = project.getBudgetCost() - totalSpent;
 
-            ProjectBudgetsReport report = new ProjectBudgetsReport(
-                    project.getProjectName(),
-                    totalSpent,
-                    project.getBudgetCost(),
-                    remainingBudget);
+        ProjectBudgetsReport report = new ProjectBudgetsReport(
+                project.getProjectName(),
+                totalSpent,
+                project.getBudgetCost(),
+                remainingBudget);
 
-            reportList.add(report);
+        reportList.add(report);
+        projectBudgetsReportRepository.save(report); // Save the report
 
 
         return reportList;
@@ -154,20 +177,21 @@ public class ReportsService {
 
     //////////////////////////////////// GENERATE CLIENT BUDGETS REPORTS ////////////////////////////////////
 
-    public List<ClientBudgetsReport> generateClientBudgetsReport(ClientDTO client, List<PaymentDTO> payments){
+    public List<ClientBudgetsReport> generateClientBudgetsReport(ClientDTO client, List<PaymentDTO> payments) {
         List<ClientBudgetsReport> reportList = new ArrayList<>();
 
-            double totalSpent = calculateTotalSpentClient(client.getClientId(), payments);
-            double clientBudget = client.getBudgetCost();
-            double remainingBudget = clientBudget - totalSpent;
+        double totalSpent = calculateTotalSpentClient(client.getClientId(), payments);
+        double clientBudget = client.getBudgetCost();
+        double remainingBudget = clientBudget - totalSpent;
 
-            ClientBudgetsReport report = new ClientBudgetsReport(
-                    client.getClientName(),
-                    totalSpent,
-                    clientBudget,
-                    remainingBudget);
+        ClientBudgetsReport report = new ClientBudgetsReport(
+                client.getClientName(),
+                totalSpent,
+                clientBudget,
+                remainingBudget);
 
-            reportList.add(report);
+        reportList.add(report);
+        clientBudgetsReportRepository.save(report); // Save the report
 
 
         return reportList;
@@ -184,35 +208,42 @@ public class ReportsService {
     //////////////////////////////////// GENERATE PAYMENTS REPORTS ////////////////////////////////////
 
     public List<PaymentsReport> generatePaymentsReport(UserDTO user, List<PaymentDTO> payments) {
+        List<PaymentsReport> reportList = new ArrayList<>();
 
         double totalAmount = payments.stream()
                 .mapToDouble(PaymentDTO::getAmount)
                 .sum();
 
         PaymentsReport report = new PaymentsReport(user.getFullName(), user.getHireDate(), totalAmount);
-        return List.of(report);
+
+        reportList.add(report);
+        paymentsReportRepository.save(report); // Save the report
+
+        return reportList;
     }
 
     //////////////////////////////////// GENERATE AMOUNTS OWED REPORTS ///////////////////////////////////
 
     public List<AmountsOwedReport> generateAmountsOwedReport(UserDTO user, List<TrackTimeDTO> timesheets) {
+        List<AmountsOwedReport> reportList = new ArrayList<>();
 
-            double weeklyLimit = Math.max(user.getWeeklyLimit(), 40.0);
-            double totalHours = timesheets.stream().mapToDouble(TrackTimeDTO::getDuration).sum();
-            double regularHours = Math.min(totalHours, weeklyLimit);
-            double overtimeHours = Math.max(0, totalHours - weeklyLimit);
-            double amountOwed = regularHours * user.getHourlyRate() + overtimeHours * (user.getHourlyRate() * 1.5);
+        double weeklyLimit = Math.max(user.getWeeklyLimit(), 40.0);
+        double totalHours = timesheets.stream().mapToDouble(TrackTimeDTO::getDuration).sum();
+        double regularHours = Math.min(totalHours, weeklyLimit);
+        double overtimeHours = Math.max(0, totalHours - weeklyLimit);
+        double amountOwed = regularHours * user.getHourlyRate() + overtimeHours * (user.getHourlyRate() * 1.5);
 
-            AmountsOwedReport report = new AmountsOwedReport(
-                    user.getFullName(), user.getWorkEmail(), user.getHireDate(),
-                    user.getHourlyRate(), regularHours, overtimeHours,
-                    totalHours, amountOwed);
-            return Collections.singletonList(report);
+        AmountsOwedReport report = new AmountsOwedReport(
+                user.getFullName(), user.getWorkEmail(), user.getHireDate(),
+                user.getHourlyRate(), regularHours, overtimeHours,
+                totalHours, amountOwed);
+
+        reportList.add(report);
+        amountsOwedReportRepository.save(report); // Save the report
+
+        return reportList;
 
     }
-
-
-
 
 
 }

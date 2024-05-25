@@ -3,12 +3,6 @@ package com.reportsMicroservice.demo.repository.others;
 
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Repository
 public class PaymentRepository {
 //    static List<Payment> payments = new ArrayList<Payment>();

@@ -2,11 +2,6 @@ package com.reportsMicroservice.demo.repository.others;
 
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
 @Repository
 public class ProjectRepository {
 //    List<Project> projects = new ArrayList<>();

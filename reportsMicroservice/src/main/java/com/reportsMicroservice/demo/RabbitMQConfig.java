@@ -33,33 +33,61 @@ public class RabbitMQConfig {
     public Queue commandQueue() {
         return new Queue("commandQueueProjects", false);
     } //I get the requests/commands from here... any service will send its command and payload here
+
     public Queue commandQueueTrackTime() {
         return new Queue("commandQueueTimeTracking", false);
     }
+
     @Bean
     public Queue command2Queue() {
         return new Queue("commandQueue", false);
     }
+
     @Bean
     public Queue timeTrackQueue() {
         return new Queue("timeTrackQueue", false);
     }
+
     @Bean
-    public Queue financeQueue()  {return new Queue("financeQueue", false);}
+    public Queue financeQueue() {
+        return new Queue("financeQueue", false);
+    }
+
     @Bean
-    public Queue project_reportsQueue()  {return new Queue("project_reportsQueue", false);}
+    public Queue project_reportsQueue() {
+        return new Queue("project_reportsQueue", false);
+    }
+
     @Bean
-    public Queue todo_reportsQueue()  {return new Queue("todo_reportsQueue", false);}
+    public Queue todo_reportsQueue() {
+        return new Queue("todo_reportsQueue", false);
+    }
+
     @Bean
-    public Queue client_reportsQueue()  {return new Queue("client_reportsQueue", false);}
+    public Queue client_reportsQueue() {
+        return new Queue("client_reportsQueue", false);
+    }
+
     @Bean
-    public Queue timetrack_reportsQueue()  {return new Queue("timetrack_reportsQueue", false);}
+    public Queue timetrack_reportsQueue() {
+        return new Queue("timetrack_reportsQueue", false);
+    }
+
     @Bean
-    public Queue user_reportsQueue()  {return new Queue("user_reportsQueue", false);}
+    public Queue user_reportsQueue() {
+        return new Queue("user_reportsQueue", false);
+    }
+
     @Bean
-    public Queue payment_reportsQueue()  {return new Queue("payment_reportsQueue", false);}
+    public Queue payment_reportsQueue() {
+        return new Queue("payment_reportsQueue", false);
+    }
+
     @Bean
-    public Queue userQueue()  {return new Queue("userQueue", false);}
+    public Queue userQueue() {
+        return new Queue("userQueue", false);
+    }
+
     @Bean
     public Jackson2JsonMessageConverter messageConverter() {
         Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter();

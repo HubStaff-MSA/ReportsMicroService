@@ -22,7 +22,7 @@ public class RabbitMQControllerPublisher {
     }
 
     @PostMapping("/sendCommandProject")
-    public String sendCommandProject (@RequestBody CommandSender commandSender) {
+    public String sendCommandProject(@RequestBody CommandSender commandSender) {
         try {
             rabbitMQService.sendMessage("commandQueueProjects", commandSender);
             return "Message sent to commandQueue: " + commandSender;
@@ -60,6 +60,7 @@ public class RabbitMQControllerPublisher {
             return "Failed to send message: " + e.getMessage();
         }
     }
+
     @PostMapping("/sendCommandTimeTrack")
     public String sendCommandTimeTrack(@RequestBody CommandSender commandSender) {
         try {

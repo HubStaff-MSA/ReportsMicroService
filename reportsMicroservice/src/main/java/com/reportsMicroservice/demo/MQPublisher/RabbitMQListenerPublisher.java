@@ -2,7 +2,6 @@ package com.reportsMicroservice.demo.MQPublisher;
 
 import com.reportsMicroservice.demo.dto.*;
 import com.reportsMicroservice.demo.service.reports.ReportsService;
-import org.apache.catalina.User;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
@@ -91,19 +90,18 @@ public class RabbitMQListenerPublisher {
 //    }
 
 
+    @RabbitListener(queues = "timetrack_reportsQueue")
+    public void test(List<TT_dto> trackTimes) {
+        System.out.println("Received TrackTime messages:");
+        System.out.println(trackTimes);
 
-        @RabbitListener(queues = "timetrack_reportsQueue")
-        public void test(List<TT_dto> trackTimes) {
-            System.out.println("Received TrackTime messages:");
-            System.out.println(trackTimes);
-
-            for (TT_dto trackTime : trackTimes) {
-                System.out.println("ID: " + trackTime.getDuration());
-                System.out.println("User ID: " + trackTime.getUserId());
-                System.out.println("Start Time: " + trackTime.getStartTime());
-                System.out.println("End Time: " + trackTime.getEndTime());
-            }
-
+        for (TT_dto trackTime : trackTimes) {
+            System.out.println("ID: " + trackTime.getDuration());
+            System.out.println("User ID: " + trackTime.getUserId());
+            System.out.println("Start Time: " + trackTime.getStartTime());
+            System.out.println("End Time: " + trackTime.getEndTime());
+        }
 
 
-    }}
+    }
+}

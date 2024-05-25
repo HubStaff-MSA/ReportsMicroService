@@ -2,11 +2,6 @@ package com.reportsMicroservice.demo.repository.others;
 
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 @Repository
 public class ShiftRepository {
 //    List<Shift> shifts = new ArrayList<>();

@@ -3,8 +3,6 @@ package com.reportsMicroservice.demo.repository.others;
 
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
-
 
 @Repository
 public class ClientRepository {

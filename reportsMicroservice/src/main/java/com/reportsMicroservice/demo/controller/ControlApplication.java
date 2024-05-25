@@ -2,13 +2,14 @@ package com.reportsMicroservice.demo.controller;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.util.Map;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentMap;
 
 @RestController
@@ -49,6 +50,7 @@ public class ControlApplication {
         }
         return CommandsMap.returnMap();
     }
+
     @PostMapping("/deletecommand")
     public ConcurrentMap<String, Class<?>> deleteCommand(@RequestBody Map<String, String> request) throws IOException {
         CommandsMap.delete(request.get("name"));

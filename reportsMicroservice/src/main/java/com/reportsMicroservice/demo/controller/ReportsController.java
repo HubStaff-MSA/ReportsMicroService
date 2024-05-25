@@ -1,17 +1,9 @@
 package com.reportsMicroservice.demo.controller;
 
-import com.reportsMicroservice.demo.commands.Command;
-import com.reportsMicroservice.demo.commands.CommandInvoker;
-
-import com.reportsMicroservice.demo.model.reports.*;
-import com.reportsMicroservice.demo.service.reports.*;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.logging.Logger;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/reports")
