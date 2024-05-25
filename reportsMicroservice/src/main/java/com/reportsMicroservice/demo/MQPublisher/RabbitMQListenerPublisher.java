@@ -103,6 +103,18 @@ public class RabbitMQListenerPublisher {
                 System.out.println("Start Time: " + trackTime.getStartTime());
                 System.out.println("End Time: " + trackTime.getEndTime());
             }
+        }
+            @RabbitListener(queues = "project_reportsQueue")
+            public void test2(List<ProjectDTO2> trackTimes) {
+                System.out.println("Received TrackTime messages:");
+                System.out.println(trackTimes);
+
+                for (ProjectDTO2 trackTime : trackTimes) {
+                    System.out.println("ID: " + trackTime.getProjectName());
+                    System.out.println("User ID: " + trackTime.getProjectName());
+                    System.out.println("Start Time: " + trackTime.getId());
+                    System.out.println("End Time: " + trackTime.getOrganizationId());
+                }
 
 
 

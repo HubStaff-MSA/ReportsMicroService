@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 @Data
 public class DatabaseConfig {
 
-    private int set_max_db_connections_count = 1;
+    private int set_max_db_connections_count = 20;
     private HikariDataSource dataSource; // Store a reference to the data source
 
     @Bean
@@ -22,7 +22,7 @@ public class DatabaseConfig {
         HikariConfig config = new HikariConfig();
 
         // Database connection settings
-        config.setJdbcUrl("jdbc:postgresql://localhost:5432/abdallahehab");
+        config.setJdbcUrl("jdbc:postgresql://postgres:5432/reportsdb");
         config.setUsername("postgres");
         config.setPassword("postgres");
 
