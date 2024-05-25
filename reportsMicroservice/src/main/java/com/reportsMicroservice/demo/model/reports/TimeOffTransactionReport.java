@@ -1,6 +1,8 @@
 package com.reportsMicroservice.demo.model.reports;
 
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 
 public class TimeOffTransactionReport {
+
     private String policy;
     private LocalDate requestedOn;
     private LocalDate startDate;

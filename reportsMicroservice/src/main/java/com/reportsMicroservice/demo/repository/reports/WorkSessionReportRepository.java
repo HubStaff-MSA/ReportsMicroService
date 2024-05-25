@@ -5,10 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface WorkSessionReportRepository extends JpaRepository<WorkSessionReport, Long> {
-    List<WorkSessionReport> findByUserId(Long userId);
-
-
+public interface WorkSessionReportRepository extends JpaRepository<WorkSessionReport, UUID> {
 }

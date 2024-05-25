@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class ReportsService {
 
@@ -47,7 +48,7 @@ public class ReportsService {
                     if (!timesheet.getTo_do().equals(toDo.getTitle())) {
                         continue;
                     } else {
-                        WorkSessionReport report = new WorkSessionReport(
+                        WorkSessionReport report = new WorkSessionReport(UUID.randomUUID(),
                                 client.getClientName(),
                                 PMtoReportsProjectDTO.getProjectName(),
                                 user.getFullName(),
@@ -83,7 +84,7 @@ public class ReportsService {
                 double overtime = Math.max(0, TotalHours - user.getWeeklyLimit());
                 double totalSpent = payments.stream().mapToDouble(PaymentDTO::getAmount).sum();
 
-                TimeAndActivityReport report = new TimeAndActivityReport(
+                TimeAndActivityReport report = new TimeAndActivityReport(UUID.randomUUID(),
                         PMtoReportsProjectDTO.getProjectName(),
                         user.getFullName(),
                         regularHours,
@@ -111,7 +112,7 @@ public class ReportsService {
             double totalHoursWorked = user.getTotalHoursWorked();
             double weeklyLimit = user.getWeeklyLimit();
 
-            WeeklyLimitReport report = new WeeklyLimitReport(
+            WeeklyLimitReport report = new WeeklyLimitReport(UUID.randomUUID(),
                     user.getId(),
                     user.getFullName(),
                     totalHoursWorked,
@@ -148,7 +149,7 @@ public class ReportsService {
         double totalSpent = calculateTotalSpent(project.getProjectId(), payments);
         double remainingBudget = project.getBudgetCost() - totalSpent;
 
-        ProjectBudgetsReport report = new ProjectBudgetsReport(
+        ProjectBudgetsReport report = new ProjectBudgetsReport(UUID.randomUUID(),
                 project.getProjectName(),
                 totalSpent,
                 project.getBudgetCost(),
@@ -184,6 +185,7 @@ public class ReportsService {
         double remainingBudget = clientBudget - totalSpent;
 
         ClientBudgetsReport report = new ClientBudgetsReport(
+                UUID.randomUUID(),
                 client.getClientName(),
                 totalSpent,
                 clientBudget,
@@ -213,7 +215,7 @@ public class ReportsService {
                 .mapToDouble(PaymentDTO::getAmount)
                 .sum();
 
-        PaymentsReport report = new PaymentsReport(user.getFullName(), user.getHireDate(), totalAmount);
+        PaymentsReport report = new PaymentsReport(UUID.randomUUID(),user.getFullName(), user.getHireDate(), totalAmount);
 
         reportList.add(report);
         paymentsReportRepository.save(report); // Save the report
@@ -232,7 +234,7 @@ public class ReportsService {
         double overtimeHours = Math.max(0, totalHours - weeklyLimit);
         double amountOwed = regularHours * user.getHourlyRate() + overtimeHours * (user.getHourlyRate() * 1.5);
 
-        AmountsOwedReport report = new AmountsOwedReport(
+        AmountsOwedReport report = new AmountsOwedReport(UUID.randomUUID(),
                 user.getFullName(), user.getWorkEmail(), user.getHireDate(),
                 user.getHourlyRate(), regularHours, overtimeHours,
                 totalHours, amountOwed);

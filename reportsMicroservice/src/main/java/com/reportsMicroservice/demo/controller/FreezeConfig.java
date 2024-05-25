@@ -72,9 +72,9 @@ public class FreezeConfig {
 
     private HikariDataSource createDataSource() {
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl("jdbc:postgresql://localhost:5433/abdallahehab");
-        config.setUsername("your-username"); // Set your DB username
-        config.setPassword("your-password"); // Set your DB password
+        config.setJdbcUrl("jdbc:postgresql://localhost:5432/reportsdb");
+        config.setUsername("postgres"); // Set your DB username
+        config.setPassword("postgres"); // Set your DB password
         config.setMaximumPoolSize(10);  // Adjust the number as needed
         config.setMinimumIdle(5);
         config.setIdleTimeout(60000);
