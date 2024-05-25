@@ -33,23 +33,23 @@ public class ReportsService {
 
 
     /////////////////////////////////// GENERATE WORK SESSION REPORTS ///////////////////////////////////
-    public List<WorkSessionReport> generateWorkSessionReports(UserDTO user, List<ProjectDTO> project, ClientDTO client,
-                                                              List<ToDoDTO> toDoDTOS, List<TrackTimeDTO> trackTimeDTOS) {
+    public List<WorkSessionReport> generateWorkSessionReports(UserDTO user, List<PMtoReportsProjectDTO> project, PMtoReportsClientDTO client,
+                                                              List<PMtoReportsToDoDTO> PMtoReportsToDoDTOS, List<TT_dto> trackTimeDTOS) {
         List<WorkSessionReport> reportList = new ArrayList<>();
 
         // Process each combination of timesheet and todo
-        for (ProjectDTO projectDTO : project) {
-            for (TrackTimeDTO timesheet : trackTimeDTOS) {
-                if (!projectDTO.getProjectName().equals(timesheet.getProject())) {
+        for (PMtoReportsProjectDTO PMtoReportsProjectDTO : project) {
+            for (TT_dto timesheet : trackTimeDTOS) {
+                if (!PMtoReportsProjectDTO.getProjectName().equals(timesheet.getProject())) {
                     continue;
                 }
-                for (ToDoDTO toDo : toDoDTOS) {
+                for (PMtoReportsToDoDTO toDo : PMtoReportsToDoDTOS) {
                     if (!timesheet.getTo_do().equals(toDo.getTitle())) {
                         continue;
                     } else {
                         WorkSessionReport report = new WorkSessionReport(
                                 client.getClientName(),
-                                projectDTO.getProjectName(),
+                                PMtoReportsProjectDTO.getProjectName(),
                                 user.getFullName(),
                                 toDo.getDescription(),
                                 timesheet.getStartTime(),
@@ -68,28 +68,27 @@ public class ReportsService {
 
     /////////////////////////////////// GENERATE TIME AND ACTIVITY REPORTS ///////////////////////////////////
 
-    public List<TimeAndActivityReport> generateTimeAndActivityReports(UserDTO user, List<ProjectDTO> projects,
-                                                                      List<TrackTimeDTO> timesheets, List<PaymentDTO> payments) {
+    public List<TimeAndActivityReport> generateTimeAndActivityReports(UserDTO user, List<PMtoReportsProjectDTO> projects,
+                                                                      List<TT_dto> timesheets, List<PaymentDTO> payments) {
 
         List<TimeAndActivityReport> reportList = new ArrayList<>();
 
-        for (ProjectDTO projectDTO : projects) {
-            for (TrackTimeDTO timesheet : timesheets) {
-                if (!projectDTO.getProjectName().equals(timesheet.getProject())) {
+        for (PMtoReportsProjectDTO PMtoReportsProjectDTO : projects) {
+            for (TT_dto timesheet : timesheets) {
+                if (!PMtoReportsProjectDTO.getProjectName().equals(timesheet.getProject())) {
                     continue;
                 }
-                double TotalHours = timesheets.stream().mapToDouble(TrackTimeDTO::getDuration).sum();
+                double TotalHours = timesheets.stream().mapToDouble(TT_dto::getDuration).sum();
                 double regularHours = Math.min(TotalHours, user.getWeeklyLimit());
                 double overtime = Math.max(0, TotalHours - user.getWeeklyLimit());
                 double totalSpent = payments.stream().mapToDouble(PaymentDTO::getAmount).sum();
 
                 TimeAndActivityReport report = new TimeAndActivityReport(
-                        projectDTO.getProjectName(),
+                        PMtoReportsProjectDTO.getProjectName(),
                         user.getFullName(),
                         regularHours,
                         overtime,
                         TotalHours,
-                        timesheet.getManual(),
                         totalSpent,
                         regularHours * user.getHourlyRate()
                 );
@@ -143,7 +142,7 @@ public class ReportsService {
 
     //////////////////////////////////// Project Budgets Report ////////////////////////////////////
 
-    public List<ProjectBudgetsReport> generateProjectBudgetsReport(ProjectDTO project, List<PaymentDTO> payments) {
+    public List<ProjectBudgetsReport> generateProjectBudgetsReport(PMtoReportsProjectDTO project, List<PaymentDTO> payments) {
         List<ProjectBudgetsReport> reportList = new ArrayList<>();
 
         double totalSpent = calculateTotalSpent(project.getProjectId(), payments);
@@ -177,7 +176,7 @@ public class ReportsService {
 
     //////////////////////////////////// GENERATE CLIENT BUDGETS REPORTS ////////////////////////////////////
 
-    public List<ClientBudgetsReport> generateClientBudgetsReport(ClientDTO client, List<PaymentDTO> payments) {
+    public List<ClientBudgetsReport> generateClientBudgetsReport(PMtoReportsClientDTO client, List<PaymentDTO> payments) {
         List<ClientBudgetsReport> reportList = new ArrayList<>();
 
         double totalSpent = calculateTotalSpentClient(client.getClientId(), payments);
@@ -224,11 +223,11 @@ public class ReportsService {
 
     //////////////////////////////////// GENERATE AMOUNTS OWED REPORTS ///////////////////////////////////
 
-    public List<AmountsOwedReport> generateAmountsOwedReport(UserDTO user, List<TrackTimeDTO> timesheets) {
+    public List<AmountsOwedReport> generateAmountsOwedReport(UserDTO user, List<TT_dto> timesheets) {
         List<AmountsOwedReport> reportList = new ArrayList<>();
 
         double weeklyLimit = Math.max(user.getWeeklyLimit(), 40.0);
-        double totalHours = timesheets.stream().mapToDouble(TrackTimeDTO::getDuration).sum();
+        double totalHours = timesheets.stream().mapToDouble(TT_dto::getDuration).sum();
         double regularHours = Math.min(totalHours, weeklyLimit);
         double overtimeHours = Math.max(0, totalHours - weeklyLimit);
         double amountOwed = regularHours * user.getHourlyRate() + overtimeHours * (user.getHourlyRate() * 1.5);

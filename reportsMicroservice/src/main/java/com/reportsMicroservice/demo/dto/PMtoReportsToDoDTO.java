@@ -7,11 +7,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ToDoDTO {
+public class PMtoReportsToDoDTO {
 
-    //private Integer todoId;
     private String title;
     private String description;
-    private Integer userId;  //Assignee
+    private Integer userId;
 
 }

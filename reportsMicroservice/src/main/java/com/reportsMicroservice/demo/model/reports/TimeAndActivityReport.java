@@ -17,7 +17,6 @@ public class TimeAndActivityReport {
     private double regularHours;
     private double overtime;
     private double totalHours;
-    private double manualHours;
     private double totalSpent;
     private double regularSpent;
 }

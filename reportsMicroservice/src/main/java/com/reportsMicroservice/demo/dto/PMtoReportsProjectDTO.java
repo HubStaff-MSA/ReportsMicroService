@@ -9,11 +9,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ClientDTO implements Serializable {
+public class PMtoReportsProjectDTO implements Serializable {
 
-    private Integer clientId;
-    private String clientName;
-    private double budgetCost;
-    private String projectName;
     private Integer projectId;
+    private String projectName;
+    private Integer clientId;
+    private double budgetCost;
+
 }

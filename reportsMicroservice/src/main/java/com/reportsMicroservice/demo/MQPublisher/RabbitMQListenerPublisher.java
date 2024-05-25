@@ -10,10 +10,10 @@ import java.util.List;
 @Service
 public class RabbitMQListenerPublisher {
 
-    private ProjectDTO Project;
+    private PMtoReportsProjectDTO Project;
     private UserDTO User;
-    private ToDoDTO ToDo;
-    private TrackTimeDTO trackTime;
+    private PMtoReportsToDoDTO ToDo;
+    private TT_dto trackTime;
     private PaymentDTO Payment;
 
     private ReportsService reportservice;
