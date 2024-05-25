@@ -1,6 +1,7 @@
 package com.reportsMicroservice.demo.MQPublisher;
 
 import com.reportsMicroservice.demo.dto.*;
+import com.reportsMicroservice.demo.model.reports.WeeklyLimitReport;
 import com.reportsMicroservice.demo.service.reports.ReportsService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
@@ -101,7 +102,17 @@ public class RabbitMQListenerPublisher {
             System.out.println("Start Time: " + trackTime.getStartTime());
             System.out.println("End Time: " + trackTime.getEndTime());
         }
+
+
     }
+
+    @RabbitListener(queues = "U_R_Queue")
+    public void testUser(UserDTO user) {
+        System.out.println("Received TrackTime messages:");
+        List < WeeklyLimitReport> weeklyLimitReports = reportservice.generateWeeklyLimitReport(user);
+
+    }
+
 
     @RabbitListener(queues = "P_R_Queue")
     public void testProject(List<PMtoReportsProjectDTO> projects) {
