@@ -14,7 +14,6 @@ public class CommandSender implements Serializable {
     private String command;
     private Object payload;
     private String requestQueue;
+    private String PublishedQueue;
 
-    // Default constructor
-    // Parameterized constructor
 }

@@ -3,12 +3,15 @@ package com.reportsMicroservice.demo.service.reports;
 import com.reportsMicroservice.demo.dto.*;
 import com.reportsMicroservice.demo.model.reports.*;
 import com.reportsMicroservice.demo.repository.reports.*;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Service
 public class ReportsService {
 
     @Autowired
@@ -33,85 +36,70 @@ public class ReportsService {
     private AmountsOwedReportRepository amountsOwedReportRepository;
 
 
-    /////////////////////////////////// GENERATE WORK SESSION REPORTS ///////////////////////////////////
-    public List<WorkSessionReport> generateWorkSessionReports(UserDTO user, List<PMtoReportsProjectDTO> project, PMtoReportsClientDTO client,
-                                                              List<PMtoReportsToDoDTO> PMtoReportsToDoDTOS, List<TT_dto> trackTimeDTOS) {
+    @Transactional
+    public List<WorkSessionReport> generateWorkSessionReports(UserDTO user, List<PMtoReportsProjectDTO> projects,
+                                                              PMtoReportsClientDTO client, List<PMtoReportsToDoDTO> toDos,
+                                                              List<TT_dto> trackTimes) {
         List<WorkSessionReport> reportList = new ArrayList<>();
-
-        // Process each combination of timesheet and todo
-        for (PMtoReportsProjectDTO PMtoReportsProjectDTO : project) {
-            for (TT_dto timesheet : trackTimeDTOS) {
-                if (!PMtoReportsProjectDTO.getProjectName().equals(timesheet.getProject())) {
+        for (PMtoReportsProjectDTO project : projects) {
+            for (TT_dto timesheet : trackTimes) {
+                if (!project.getProjectName().equals(timesheet.getProject())) {
                     continue;
                 }
-                for (PMtoReportsToDoDTO toDo : PMtoReportsToDoDTOS) {
-                    if (!timesheet.getTo_do().equals(toDo.getTitle())) {
-                        continue;
-                    } else {
+                for (PMtoReportsToDoDTO toDo : toDos) {
+                    if (timesheet.getTo_do().equals(toDo.getTitle())) {
                         WorkSessionReport report = new WorkSessionReport(UUID.randomUUID(),
                                 client.getClientName(),
-                                PMtoReportsProjectDTO.getProjectName(),
+                                project.getProjectName(),
                                 user.getFullName(),
                                 toDo.getDescription(),
                                 timesheet.getStartTime(),
                                 timesheet.getEndTime(),
                                 timesheet.getDuration());
-
                         reportList.add(report);
-                        workSessionReportRepository.save(report); // Save the report
+                        workSessionReportRepository.save(report);
                     }
                 }
             }
         }
-
         return reportList;
     }
 
-    /////////////////////////////////// GENERATE TIME AND ACTIVITY REPORTS ///////////////////////////////////
-
+    @Transactional
     public List<TimeAndActivityReport> generateTimeAndActivityReports(UserDTO user, List<PMtoReportsProjectDTO> projects,
                                                                       List<TT_dto> timesheets, List<PaymentDTO> payments) {
-
         List<TimeAndActivityReport> reportList = new ArrayList<>();
-
-        for (PMtoReportsProjectDTO PMtoReportsProjectDTO : projects) {
+        for (PMtoReportsProjectDTO project : projects) {
             for (TT_dto timesheet : timesheets) {
-                if (!PMtoReportsProjectDTO.getProjectName().equals(timesheet.getProject())) {
-                    continue;
+                if (project.getProjectName().equals(timesheet.getProject())) {
+                    double totalHours = timesheets.stream().mapToDouble(TT_dto::getDuration).sum();
+                    double regularHours = Math.min(totalHours, user.getWeeklyLimit());
+                    double overtime = Math.max(0, totalHours - user.getWeeklyLimit());
+                    double totalSpent = payments.stream().mapToDouble(PaymentDTO::getAmount).sum();
+
+                    TimeAndActivityReport report = new TimeAndActivityReport(UUID.randomUUID(),
+                            project.getProjectName(),
+                            user.getFullName(),
+                            regularHours,
+                            overtime,
+                            totalHours,
+                            totalSpent,
+                            regularHours * user.getHourlyRate());
+
+                    reportList.add(report);
+                    timeAndActivityReportRepository.save(report);
                 }
-                double TotalHours = timesheets.stream().mapToDouble(TT_dto::getDuration).sum();
-                double regularHours = Math.min(TotalHours, user.getWeeklyLimit());
-                double overtime = Math.max(0, TotalHours - user.getWeeklyLimit());
-                double totalSpent = payments.stream().mapToDouble(PaymentDTO::getAmount).sum();
-
-                TimeAndActivityReport report = new TimeAndActivityReport(UUID.randomUUID(),
-                        PMtoReportsProjectDTO.getProjectName(),
-                        user.getFullName(),
-                        regularHours,
-                        overtime,
-                        TotalHours,
-                        totalSpent,
-                        regularHours * user.getHourlyRate()
-                );
-
-                reportList.add(report);
-                timeAndActivityReportRepository.save(report); // Save the report
-
             }
         }
         return reportList;
     }
 
-
-    //////////////////////////////////// GENERATE WEEKLY LIMIT REPORTS ////////////////////////////////////
-
+    @Transactional
     public List<WeeklyLimitReport> generateWeeklyLimitReport(UserDTO user) {
         List<WeeklyLimitReport> reportList = new ArrayList<>();
-
         if (user.getWeeklyLimit() > 0) {
             double totalHoursWorked = user.getTotalHoursWorked();
             double weeklyLimit = user.getWeeklyLimit();
-
             WeeklyLimitReport report = new WeeklyLimitReport(UUID.randomUUID(),
                     user.getId(),
                     user.getFullName(),
@@ -119,33 +107,23 @@ public class ReportsService {
                     weeklyLimit,
                     calculatePercentageUsed(totalHoursWorked, weeklyLimit),
                     calculateRemainingHours(totalHoursWorked, weeklyLimit));
-
             reportList.add(report);
-            weeklyLimitReportRepository.save(report); // Save the report
+            weeklyLimitReportRepository.save(report);
         }
-
-
         return reportList;
     }
 
     private double calculatePercentageUsed(double totalHoursWorked, double weeklyLimit) {
-        if (weeklyLimit > 0) {
-            return (totalHoursWorked / weeklyLimit) * 100.0;
-        } else {
-            return 0.0;
-        }
+        return weeklyLimit > 0 ? (totalHoursWorked / weeklyLimit) * 100.0 : 0.0;
     }
 
-    // Helper method to calculate remaining hours within weekly limit
     private double calculateRemainingHours(double totalHoursWorked, double weeklyLimit) {
         return Math.max(weeklyLimit - totalHoursWorked, 0.0);
     }
 
-    //////////////////////////////////// Project Budgets Report ////////////////////////////////////
-
+    @Transactional
     public List<ProjectBudgetsReport> generateProjectBudgetsReport(PMtoReportsProjectDTO project, List<PaymentDTO> payments) {
         List<ProjectBudgetsReport> reportList = new ArrayList<>();
-
         double totalSpent = calculateTotalSpent(project.getProjectId(), payments);
         double remainingBudget = project.getBudgetCost() - totalSpent;
 
@@ -156,30 +134,20 @@ public class ReportsService {
                 remainingBudget);
 
         reportList.add(report);
-        projectBudgetsReportRepository.save(report); // Save the report
-
-
+        projectBudgetsReportRepository.save(report);
         return reportList;
     }
 
-    // Helper method to calculate total spent for a project
     private double calculateTotalSpent(Integer projectId, List<PaymentDTO> payments) {
-        double totalSpent = 0.0;
-
-        for (PaymentDTO payment : payments) {
-            if (payment.getProjectId().equals(projectId)) {
-                totalSpent += payment.getAmount();
-            }
-        }
-
-        return totalSpent;
+        return payments.stream()
+                .filter(payment -> payment.getProjectId().equals(projectId))
+                .mapToDouble(PaymentDTO::getAmount)
+                .sum();
     }
 
-    //////////////////////////////////// GENERATE CLIENT BUDGETS REPORTS ////////////////////////////////////
-
+    @Transactional
     public List<ClientBudgetsReport> generateClientBudgetsReport(PMtoReportsClientDTO client, List<PaymentDTO> payments) {
         List<ClientBudgetsReport> reportList = new ArrayList<>();
-
         double totalSpent = calculateTotalSpentClient(client.getClientId(), payments);
         double clientBudget = client.getBudgetCost();
         double remainingBudget = clientBudget - totalSpent;
@@ -192,13 +160,10 @@ public class ReportsService {
                 remainingBudget);
 
         reportList.add(report);
-        clientBudgetsReportRepository.save(report); // Save the report
-
-
+        clientBudgetsReportRepository.save(report);
         return reportList;
     }
 
-    // Helper method to calculate total spent for a client
     private double calculateTotalSpentClient(Integer clientId, List<PaymentDTO> payments) {
         return payments.stream()
                 .filter(payment -> payment.getPayerId().equals(clientId))
@@ -206,28 +171,20 @@ public class ReportsService {
                 .sum();
     }
 
-    //////////////////////////////////// GENERATE PAYMENTS REPORTS ////////////////////////////////////
-
+    @Transactional
     public List<PaymentsReport> generatePaymentsReport(UserDTO user, List<PaymentDTO> payments) {
         List<PaymentsReport> reportList = new ArrayList<>();
+        double totalAmount = payments.stream().mapToDouble(PaymentDTO::getAmount).sum();
 
-        double totalAmount = payments.stream()
-                .mapToDouble(PaymentDTO::getAmount)
-                .sum();
-
-        PaymentsReport report = new PaymentsReport(UUID.randomUUID(),user.getFullName(), user.getHireDate(), totalAmount);
-
+        PaymentsReport report = new PaymentsReport(UUID.randomUUID(), user.getFullName(), user.getHireDate(), totalAmount);
         reportList.add(report);
-        paymentsReportRepository.save(report); // Save the report
-
+        paymentsReportRepository.save(report);
         return reportList;
     }
 
-    //////////////////////////////////// GENERATE AMOUNTS OWED REPORTS ///////////////////////////////////
-
+    @Transactional
     public List<AmountsOwedReport> generateAmountsOwedReport(UserDTO user, List<TT_dto> timesheets) {
         List<AmountsOwedReport> reportList = new ArrayList<>();
-
         double weeklyLimit = Math.max(user.getWeeklyLimit(), 40.0);
         double totalHours = timesheets.stream().mapToDouble(TT_dto::getDuration).sum();
         double regularHours = Math.min(totalHours, weeklyLimit);
@@ -240,11 +197,7 @@ public class ReportsService {
                 totalHours, amountOwed);
 
         reportList.add(report);
-        amountsOwedReportRepository.save(report); // Save the report
-
+        amountsOwedReportRepository.save(report);
         return reportList;
-
     }
-
-
 }

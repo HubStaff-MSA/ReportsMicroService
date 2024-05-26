@@ -30,48 +30,39 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Queue commandQueue() {
-        return new Queue("commandQueueProjects", false);
-    } //I get the requests/commands from here... any service will send its command and payload here
+    public Queue command2Queue() {
+        return new Queue("commandQueue", false);
+    }//I get the requests/commands from here... any service will send its command and payload here
 
+    @Bean
+    public Queue commandQueueProjects() {return new Queue("commandQueueProjects", false);}
+    @Bean
     public Queue commandQueueTrackTime() {
         return new Queue("commandQueueTimeTracking", false);
     }
-
     @Bean
-    public Queue command2Queue() {
-        return new Queue("commandQueue", false);
-    }
-
+    public Queue commandQueueUser() {return new Queue("commandQueueUser", false);}
     @Bean
-    public Queue project_reportsQueue() {
-        return new Queue("P_R_Queue", false);
-    }
-
-    @Bean
-    public Queue todo_reportsQueue() {
-        return new Queue("todo_reportsQueue", false);
-    }
-
-    @Bean
-    public Queue client_reportsQueue() {
-        return new Queue("client_reportsQueue", false);
-    }
+    public Queue commandQueueFinance() {return new Queue("commandQueueFinance", false);}
 
     @Bean
     public Queue timetrack_reportsQueue() {
         return new Queue("TT_R_Queue", false);
     }
-
     @Bean
     public Queue user_reportsQueue() {
         return new Queue("U_R_Queue", false);
     }
-
     @Bean
     public Queue finance_reportsQueue() {
         return new Queue("F_R_Queue", false);
     }
+    @Bean
+    public Queue reportsProjectsQueue()  {return new Queue("P_R_Projects_Queue", false);}
+    @Bean
+    public Queue reportsClientsQueue()  {return new Queue("P_R_Clients_Queue", false);}
+    @Bean
+    public Queue reportsToDosQueue()  {return new Queue("P_R_ToDos_Queue", false);}
 
 
     @Bean

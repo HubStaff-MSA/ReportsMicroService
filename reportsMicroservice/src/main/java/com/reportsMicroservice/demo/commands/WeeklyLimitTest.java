@@ -28,7 +28,7 @@ public class WeeklyLimitTest implements Command {
             String command = "GetUser";
             Object payload = userId;
             String requestQueue = "U_R_Queue";
-            CommandSender commandSender = new CommandSender(command, payload, requestQueue);
+            CommandSender commandSender = new CommandSender(command, payload, requestQueue, "commandQueueUser");
             rabbitMQServicePublisher.sendMessage("commandQueueUser",commandSender);
             System.out.println("--------------------------------------------------------------Message sent to User Microservice "+userId);
 

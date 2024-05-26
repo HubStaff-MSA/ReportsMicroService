@@ -21,6 +21,16 @@ public class RabbitMQControllerPublisher {
         this.rabbitMQService = rabbitMQService;
     }
 
+    @PostMapping("/sendCommand")
+    public String sendCommand(@RequestBody CommandSender commandSender) {
+        try {
+            rabbitMQService.sendMessage("commandQueue", commandSender);
+            return "Message sent to commandQueue: " + commandSender;
+        } catch (Exception e) {
+            return "Failed to send message: " + e.getMessage();
+        }
+    }
+
     @PostMapping("/sendCommandProject")
     public String sendCommandProject(@RequestBody CommandSender commandSender) {
         try {
@@ -31,15 +41,7 @@ public class RabbitMQControllerPublisher {
         }
     }
 
-    @PostMapping("/sendCommand")
-    public String sendCommand(@RequestBody CommandSender commandSender) {
-        try {
-            rabbitMQService.sendMessage("commandQueue", commandSender);
-            return "Message sent to commandQueue: " + commandSender;
-        } catch (Exception e) {
-            return "Failed to send message: " + e.getMessage();
-        }
-    }
+
 
     @PostMapping("/sendCommandUser")
     public String sendCommandUser(@RequestBody CommandSender commandSender) {
