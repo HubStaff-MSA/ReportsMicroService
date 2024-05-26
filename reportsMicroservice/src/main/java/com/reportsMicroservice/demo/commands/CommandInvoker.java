@@ -4,16 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommandInvoker {
-    private List<Command> commandQueue = new ArrayList<>();
-
-    public void addCommand(Command command) {
-        commandQueue.add(command);
-    }
-
-    public void executeCommands() {
-        for (Command command : commandQueue) {
-            command.execute();
-        }
-        commandQueue.clear();
+    public void executeCommand(Command command) {
+        command.execute();
     }
 }

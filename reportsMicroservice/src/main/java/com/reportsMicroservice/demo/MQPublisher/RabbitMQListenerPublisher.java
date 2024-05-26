@@ -1,5 +1,6 @@
 package com.reportsMicroservice.demo.MQPublisher;
 
+import com.reportsMicroservice.demo.commands.*;
 import com.reportsMicroservice.demo.dto.*;
 import com.reportsMicroservice.demo.model.reports.WeeklyLimitReport;
 import com.reportsMicroservice.demo.service.reports.ReportsService;
@@ -10,32 +11,34 @@ import java.util.List;
 
 @Service
 public class RabbitMQListenerPublisher {
+    private final ReportsService reportsService;
+    private final CommandInvoker commandInvoker;
+    private UserDTO user;
+    private List<PMtoReportsProjectDTO> projects;
+    private PMtoReportsClientDTO client;
+    private List<PMtoReportsToDoDTO> todos;
+    private List<TT_dto> trackTimes;
+    private List<PaymentDTO> payments;
 
-    private PMtoReportsProjectDTO Project;
-    private UserDTO User;
-    private PMtoReportsToDoDTO ToDo;
-    private TT_dto trackTime;
-    private PaymentDTO Payment;
 
-    private ReportsService reportservice;
-
-    public RabbitMQListenerPublisher(ReportsService reportservice) {
-        this.reportservice = reportservice;
+    public RabbitMQListenerPublisher(ReportsService reportsService, CommandInvoker commandInvoker) {
+        this.reportsService = reportsService;
+        this.commandInvoker = commandInvoker;
     }
 
     // User to Reports Queue
     @RabbitListener(queues = "U_R_Queue")
-    public void testUser(UserDTO user) {
+    public void receiveUserData(UserDTO user) {
         System.out.println("Received TrackTime messages:");
-        //List < WeeklyLimitReport> weeklyLimitReports = reportservice.generateWeeklyLimitReport(user);
-
+        this.user = user;
+        processCommands();
     }
 
     // Time Tracking to Reports Queue
     @RabbitListener(queues = "TT_R_Queue")
-    public void test(List<TT_dto> trackTimes) {
-        System.out.println("Received TrackTime messages:");
-        System.out.println(trackTimes);
+    public void receiveTrackTimes(List<TT_dto> trackTimes) {
+        this.trackTimes = trackTimes;
+        processCommands();
 
         for (TT_dto trackTime : trackTimes) {
             System.out.println("ID: " + trackTime.getDuration());
@@ -49,9 +52,9 @@ public class RabbitMQListenerPublisher {
 
     // Payment to Reports Queue
     @RabbitListener(queues = "P_R_Queue")
-    public void testProject(List<PMtoReportsProjectDTO> projects) {
-        System.out.println("Received Project messages:");
-        System.out.println(projects);
+    public void receiveProjects(List<PMtoReportsProjectDTO> projects) {
+        this.projects = projects;
+        processCommands();
 
         for (PMtoReportsProjectDTO project : projects) {
             System.out.println("ID: " + project.getProjectId());
@@ -64,9 +67,9 @@ public class RabbitMQListenerPublisher {
 
     // Finance to Reports Queue
     @RabbitListener(queues = "F_R_Queue")
-    public void testPayment(List<PaymentDTO> payments) {
-        System.out.println("Received Payment messages:");
-        System.out.println(payments);
+    public void receivePayments(List<PaymentDTO> payments) {
+        this.payments = payments;
+        processCommands();
 
         for (PaymentDTO payment : payments) {
             System.out.println("ID: " + payment.getPaymentID());
@@ -75,5 +78,60 @@ public class RabbitMQListenerPublisher {
             System.out.println("Payer: " + payment.getPayerId());
             System.out.println("Payee: " + payment.getMemberId());
         }
+    }
+
+    private void processCommands() {
+
+        //work session report
+        if (user != null && projects != null && trackTimes != null && client != null && todos != null) {
+            Command workSessionCommand = new WorkSessionReportCommand(reportsService, user, projects, client, todos, trackTimes);
+            commandInvoker.executeCommand(workSessionCommand);
+            resetData();
+        }
+        //time and activity report
+        if (user != null && projects != null && trackTimes != null && payments != null) {
+            Command timeAndActivityCommand = new TimeAndActivityReportCommand(reportsService, user, projects, trackTimes, payments);
+            commandInvoker.executeCommand(timeAndActivityCommand);
+            resetData();
+        }
+        //weekly limit report
+        if (user!=null){
+            Command weeklyLimitCommand = new WeeklyLimitReportCommand(reportsService, user);
+            commandInvoker.executeCommand(weeklyLimitCommand);
+            resetData();
+        }
+        //project budget report (projects and payments)
+        if (projects != null && payments != null) {
+            Command projectBudgetCommand = new ProjectBudgetsReportCommand(reportsService, projects.get(0), payments);
+            commandInvoker.executeCommand(projectBudgetCommand);
+            resetData();
+        }
+        //client budget report (client and payments)
+        if (client != null && payments != null) {
+            Command clientBudgetCommand = new ClientBudgetsReportCommand(reportsService, client, payments);
+            commandInvoker.executeCommand(clientBudgetCommand);
+            resetData();
+        }
+        //payments report (user and payments)
+        if (user != null && payments != null) {
+            Command paymentsCommand = new PaymentsReportCommand(reportsService, user, payments);
+            commandInvoker.executeCommand(paymentsCommand);
+            resetData();
+        }
+        //amounts owed report (user and timetracks)
+        if (user != null && trackTimes != null) {
+            Command amountCommand = new AmountsOwedReportCommand(reportsService, user, trackTimes);
+            commandInvoker.executeCommand(amountCommand);
+            resetData();
+        }
+
+    }
+    private void resetData() {
+        user = null;
+        projects = null;
+        client = null;
+        todos = null;
+        trackTimes = null;
+        payments = null;
     }
 }
