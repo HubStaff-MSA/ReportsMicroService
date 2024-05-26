@@ -7,7 +7,7 @@ spring:
     max-thread-count: 6
   datasource:
     password: postgres
-    url: jdbc:postgresql://postgres:5432/reportsdb
+    url: jdbc:postgresql://localhost:5432/reportsdb
     username: postgres
     driverClassName: org.postgresql.Driver
   jpa:
