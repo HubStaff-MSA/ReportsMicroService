@@ -30,7 +30,7 @@ public class WebServer_AmountsOwed implements Command {
     public void execute() {
         CommandSender command = new CommandSender("GetUser", id,
                 "U_R_Queue");
-        UserDTO user = (UserDTO) rabbitTemplate.convertSendAndReceive("commandQueueUser", command);
+        UserDTO user = (UserDTO) rabbitTemplate.convertSendAndReceive("WebServerUserQueue", command);
 
         //List of timetracks
         CommandSender command2 = new CommandSender("ListOfTimeTracksByUsersIds", id,

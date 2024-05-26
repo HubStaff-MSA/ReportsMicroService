@@ -29,12 +29,12 @@ public class WebServer_ClientBudgets implements Command {
     public void execute() {
         CommandSender command = new CommandSender("getClientCommand", clientId,
                 "P_R_Clients_Queue");
-        PMtoReportsClientDTO client = (PMtoReportsClientDTO) rabbitTemplate.convertSendAndReceive("commandQueueProjects", command);
+        PMtoReportsClientDTO client = (PMtoReportsClientDTO) rabbitTemplate.convertSendAndReceive("webServerCommandQueueProjects", command);
 
         //List of payments by client
         CommandSender command2 = new CommandSender("getTotalAmountByPayerId", clientId,
                 "F_R_Queue");
-        List<PaymentDTO> payments = (List<PaymentDTO>) rabbitTemplate.convertSendAndReceive("commandQueueFinance", command2);
+        List<PaymentDTO> payments = (List<PaymentDTO>) rabbitTemplate.convertSendAndReceive("WebServerQueueFinance", command2);
 
         returnedValue = reportsService.generateClientBudgetsReport(client, payments);
 

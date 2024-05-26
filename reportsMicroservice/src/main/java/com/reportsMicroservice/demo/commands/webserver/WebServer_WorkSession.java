@@ -37,7 +37,7 @@ public class WebServer_WorkSession implements Command {
         CommandSender command = new CommandSender("GetUser", id,
                 "U_R_Queue");
         //rabbitMQServicePublisher.sendMessage("commandQueueUser", command);
-        UserDTO user = (UserDTO) rabbitTemplate.convertSendAndReceive("commandQueueUser", command);
+        UserDTO user = (UserDTO) rabbitTemplate.convertSendAndReceive("WebServerUserQueue", command);
 
         //command for time track
         CommandSender command2 = new CommandSender("ListOfTimeTracksByUsersIds", List.of(id),
@@ -49,13 +49,13 @@ public class WebServer_WorkSession implements Command {
         CommandSender command3 = new CommandSender("getProjectsByUserIdCommand", id,
                 "P_R_Projects_Queue");
         //rabbitMQServicePublisher.sendMessage("commandQueueProjects", command3);
-        List<PMtoReportsProjectDTO> projects = (List<PMtoReportsProjectDTO>) rabbitTemplate.convertSendAndReceive("commandQueueProjects", command3);
+        List<PMtoReportsProjectDTO> projects = (List<PMtoReportsProjectDTO>) rabbitTemplate.convertSendAndReceive("webServerCommandQueueProjects", command3);
 
         //command for to do
         CommandSender command5 = new CommandSender("getToDosByUserId", id,
                 "P_R_ToDos_Queue");
         //rabbitMQServicePublisher.sendMessage("commandQueueProjects", command5);
-        List<PMtoReportsToDoDTO> todos = (List<PMtoReportsToDoDTO>) rabbitTemplate.convertSendAndReceive("commandQueueProjects", command5);
+        List<PMtoReportsToDoDTO> todos = (List<PMtoReportsToDoDTO>) rabbitTemplate.convertSendAndReceive("webServerCommandQueueProjects", command5);
 
 
         returnedValue = reportsService.generateWorkSessionReports(user, projects, todos, trackTimes);

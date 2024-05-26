@@ -27,7 +27,7 @@ public class WebServer_TimeAndActivity implements Command {
     public void execute() {
         CommandSender command = new CommandSender("GetUser", id,
                 "U_R_Queue");
-       UserDTO user = (UserDTO) rabbitTemplate.convertSendAndReceive("commandQueueUser", command);
+       UserDTO user = (UserDTO) rabbitTemplate.convertSendAndReceive("WebServerUserQueue", command);
 
         //List of time tracks
         CommandSender command2 = new CommandSender("ListOfTimeTracksByUsersIds", List.of(id),
@@ -37,12 +37,12 @@ public class WebServer_TimeAndActivity implements Command {
         //List of projects
         CommandSender command3 = new CommandSender("getProjectsByUserIdCommand", id,
                 "P_R_Projects_Queue");
-        List<PMtoReportsProjectDTO> projects= (List<PMtoReportsProjectDTO>) rabbitTemplate.convertSendAndReceive("commandQueueProjects", command3);
+        List<PMtoReportsProjectDTO> projects= (List<PMtoReportsProjectDTO>) rabbitTemplate.convertSendAndReceive("webServerCommandQueueProjects", command3);
 
         //List of payments
         CommandSender command4 = new CommandSender("getTotalAmountPerMember", id,
                 "F_R_Queue");
-       List<PaymentDTO> payments = (List<PaymentDTO>) rabbitTemplate.convertSendAndReceive("commandQueueFinance", command4);
+       List<PaymentDTO> payments = (List<PaymentDTO>) rabbitTemplate.convertSendAndReceive("WebServerQueueFinance", command4);
 
         returnedValue = reportsService.generateTimeAndActivityReports(user, projects, timetracks, payments);
 

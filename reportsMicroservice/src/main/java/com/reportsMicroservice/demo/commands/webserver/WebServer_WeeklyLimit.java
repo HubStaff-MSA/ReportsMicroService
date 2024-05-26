@@ -28,7 +28,7 @@ public class WebServer_WeeklyLimit implements Command {
     public void execute() {
         CommandSender command = new CommandSender("GetUser", id,
                 "U_R_Queue");
-        UserDTO user = (UserDTO) rabbitTemplate.convertSendAndReceive("commandQueueUser", command);
+        UserDTO user = (UserDTO) rabbitTemplate.convertSendAndReceive("WebServerUserQueue", command);
         returnedValue = reportsService.generateWeeklyLimitReport(user);
     }
 
