@@ -1,7 +1,9 @@
-package com.reportsMicroservice.demo.commands;
+package com.reportsMicroservice.demo.commands.webserver;
 
 import com.reportsMicroservice.demo.MQPublisher.RabbitMQListenerPublisher;
 import com.reportsMicroservice.demo.MQPublisher.RabbitMQServicePublisher;
+import com.reportsMicroservice.demo.commands.Command;
+import com.reportsMicroservice.demo.commands.CommandInvoker;
 import com.reportsMicroservice.demo.dto.*;
 import com.reportsMicroservice.demo.model.reports.WorkSessionReport;
 import com.reportsMicroservice.demo.service.reports.ReportsService;
@@ -9,26 +11,22 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
 import java.util.List;
 
-public class WebServer_WorkSession implements Command{
+public class WebServer_WorkSession implements Command {
 
     private String id;
-    private final RabbitMQServicePublisher rabbitMQServicePublisher;
     private final RabbitTemplate rabbitTemplate;
 
-   private final CommandInvoker commandInvoker;
+    private final ReportsService reportsService;
 
-   private final ReportsService reportsService;
-
-   private List<WorkSessionReport> returnedValue;
+    private List<WorkSessionReport> returnedValue;
 
 
 
-    public WebServer_WorkSession(RabbitMQServicePublisher rabbitMQServicePublisher, String id,
-                                 RabbitTemplate rabbitTemplate, CommandInvoker commandInvoker, ReportsService reportsService) {
-        this.rabbitMQServicePublisher = rabbitMQServicePublisher;
+    public WebServer_WorkSession(String id,
+                                 RabbitTemplate rabbitTemplate,
+                                 ReportsService reportsService) {
         this.id = id;
         this.rabbitTemplate = rabbitTemplate;
-        this.commandInvoker = commandInvoker;
         this.reportsService = reportsService;
     }
 

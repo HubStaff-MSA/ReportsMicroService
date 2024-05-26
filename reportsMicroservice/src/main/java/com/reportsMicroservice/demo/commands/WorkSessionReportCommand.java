@@ -3,6 +3,7 @@ package com.reportsMicroservice.demo.commands;
 import com.reportsMicroservice.demo.dto.*;
 import com.reportsMicroservice.demo.model.reports.WorkSessionReport;
 import com.reportsMicroservice.demo.service.reports.ReportsService;
+import lombok.Getter;
 
 import java.util.List;
 
@@ -13,6 +14,9 @@ public class WorkSessionReportCommand implements Command {
     private PMtoReportsClientDTO client;
     private List<PMtoReportsToDoDTO> PMtoReportsToDoDTOS;
     private List<TT_dto> trackTimeDTOS;
+
+    @Getter
+    public List<WorkSessionReport> returnedValue;
 
 
     public WorkSessionReportCommand(ReportsService reportsService, UserDTO user, List<PMtoReportsProjectDTO> projects, List<PMtoReportsToDoDTO> PMtoReportsToDoDTOS, List<TT_dto> trackTimeDTOS) {
@@ -25,7 +29,7 @@ public class WorkSessionReportCommand implements Command {
 
     @Override
     public void execute() {
-        reportsService.generateWorkSessionReports(user, projects, PMtoReportsToDoDTOS, trackTimeDTOS);
+        returnedValue = reportsService.generateWorkSessionReports(user, projects, PMtoReportsToDoDTOS, trackTimeDTOS);
     }
 }
 

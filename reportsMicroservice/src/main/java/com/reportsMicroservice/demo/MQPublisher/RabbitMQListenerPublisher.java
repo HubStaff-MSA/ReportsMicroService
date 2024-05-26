@@ -5,6 +5,7 @@ import com.reportsMicroservice.demo.commands.*;
 import com.reportsMicroservice.demo.controller.CommandsMap;
 import com.reportsMicroservice.demo.dto.*;
 import com.reportsMicroservice.demo.model.reports.WeeklyLimitReport;
+import com.reportsMicroservice.demo.model.reports.WorkSessionReport;
 import com.reportsMicroservice.demo.service.reports.ReportsService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
