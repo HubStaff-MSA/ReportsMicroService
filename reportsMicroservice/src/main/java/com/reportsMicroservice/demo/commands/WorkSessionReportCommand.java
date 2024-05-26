@@ -14,7 +14,6 @@ public class WorkSessionReportCommand implements Command {
     private List<PMtoReportsToDoDTO> PMtoReportsToDoDTOS;
     private List<TT_dto> trackTimeDTOS;
 
-    private List<WorkSessionReport> returnedValue;
 
     public WorkSessionReportCommand(ReportsService reportsService, UserDTO user, List<PMtoReportsProjectDTO> projects, List<PMtoReportsToDoDTO> PMtoReportsToDoDTOS, List<TT_dto> trackTimeDTOS) {
         this.reportsService = reportsService;
@@ -26,8 +25,7 @@ public class WorkSessionReportCommand implements Command {
 
     @Override
     public void execute() {
-        List<WorkSessionReport> reportList = reportsService.generateWorkSessionReports(user, projects, PMtoReportsToDoDTOS, trackTimeDTOS);
-        this.returnedValue = reportList;
+        reportsService.generateWorkSessionReports(user, projects, PMtoReportsToDoDTOS, trackTimeDTOS);
     }
 }
 

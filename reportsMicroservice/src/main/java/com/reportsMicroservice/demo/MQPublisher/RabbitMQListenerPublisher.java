@@ -108,7 +108,7 @@ public class RabbitMQListenerPublisher {
     }
 
     // Payment to Reports Queue
-    @RabbitListener(queues = "P_R_Queue")
+    @RabbitListener(queues = "P_R_Projects_Queue")
     public void receiveProjects(List<PMtoReportsProjectDTO> projects) {
         this.projects = projects;
         processCommands();
@@ -119,6 +119,30 @@ public class RabbitMQListenerPublisher {
             System.out.println("Client Id: " + project.getClientId());
             System.out.println("Budget Cost: " + project.getBudgetCost());
 
+        }
+    }
+
+    // Client to Reports Queue
+    @RabbitListener(queues = "P_R_Clients_Queue")
+    public void receiveClient(PMtoReportsClientDTO client) {
+        this.client = client;
+        processCommands();
+
+        System.out.println("ID: " + client.getClientId());
+        System.out.println("Client Name: " + client.getClientName());
+        System.out.println("Budget Cost: " + client.getBudgetCost());
+    }
+
+    // ToDos to Reports Queue
+    @RabbitListener(queues = "P_R_ToDos_Queue")
+    public void receiveToDos(List<PMtoReportsToDoDTO> todos) {
+        this.todos = todos;
+        processCommands();
+
+        for (PMtoReportsToDoDTO todo : todos) {
+            System.out.println("Title: " + todo.getTitle());
+            System.out.println("Description: " + todo.getDescription());
+            System.out.println("USER ID: " + todo.getUserId());
         }
     }
 
