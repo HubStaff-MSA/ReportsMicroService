@@ -45,6 +45,10 @@ public class RabbitMQConfig {
     @Bean
     public Queue commandQueueFinance() {return new Queue("commandQueueFinance", false);}
 
+    //Web Server
+    @Bean
+    public Queue commandQueueReports(){ return new Queue("commandQueueReports", false);}
+
     @Bean
     public Queue timetrack_reportsQueue() {
         return new Queue("TT_R_Queue", false);

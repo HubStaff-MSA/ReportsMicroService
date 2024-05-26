@@ -1,12 +1,20 @@
 package com.reportsMicroservice.demo.MQPublisher;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.reportsMicroservice.demo.commands.*;
+import com.reportsMicroservice.demo.controller.CommandsMap;
 import com.reportsMicroservice.demo.dto.*;
 import com.reportsMicroservice.demo.model.reports.WeeklyLimitReport;
 import com.reportsMicroservice.demo.service.reports.ReportsService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.concurrent.ConcurrentHashMap;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 @Service
@@ -19,11 +27,60 @@ public class RabbitMQListenerPublisher {
     private List<PMtoReportsToDoDTO> todos;
     private List<TT_dto> trackTimes;
     private List<PaymentDTO> payments;
+    private final RabbitTemplate rabbitTemplate;
 
 
-    public RabbitMQListenerPublisher(ReportsService reportsService, CommandInvoker commandInvoker) {
+    public RabbitMQListenerPublisher(ReportsService reportsService, CommandInvoker commandInvoker, RabbitTemplate rabbitTemplate) {
         this.reportsService = reportsService;
         this.commandInvoker = commandInvoker;
+        this.rabbitTemplate = rabbitTemplate;
+    }
+
+    @RabbitListener(queues = "commandQueueReports")
+    public Object receiveMessage(CommandSender commandSender) throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, InstantiationException, JsonProcessingException {
+        Object returnedValue = callCmdMap(commandSender.getCommand() , commandSender.getPayload());
+
+        //System.out.println(returnedValue.toString());
+        return returnedValue;
+    }
+
+    public Object callCmdMap(String Command , Object Payload) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException, NoSuchFieldException {
+        Field cmdMapField = CommandsMap.class.getDeclaredField("cmdMap");
+
+        // Make the field accessible
+        cmdMapField.setAccessible(true);
+        // Get the cmdMap value
+        Object cmdMapValue = cmdMapField.get(null);
+        // Assuming cmdMapValue is a Map<String, Class<?>>
+        ConcurrentHashMap<String, Class<?>> cmdMap = (ConcurrentHashMap<String, Class<?>>) cmdMapValue;
+
+        Class<?> commandClass = (Class<?>) cmdMap.get(Command);
+
+        // Object commandInstance = commandClass.newInstance();
+        Object commandInstance = commandClass.getDeclaredConstructor(ReportsService.class).newInstance(reportsService);
+
+        // Get the build method of the command class
+        Method buildMethod = commandClass.getDeclaredMethod("build", Object.class);
+
+        // Invoke the build method
+        buildMethod.invoke(commandInstance, Payload);
+
+        // Get the execute method of the command class
+        Method executeMethod = commandClass.getDeclaredMethod("execute", null);
+
+        // Invoke the execute method
+        executeMethod.invoke(commandInstance);
+
+        // Get the returned field of the command class
+        Field returnedField = commandClass.getDeclaredField("returned");
+
+        // Make the field accessible
+        returnedField.setAccessible(true);
+
+        // Get the value of the returned field from the command instance
+        Object returnedValue = (Object) returnedField.get(commandInstance);
+
+        return returnedValue;
     }
 
     // User to Reports Queue
@@ -80,11 +137,11 @@ public class RabbitMQListenerPublisher {
         }
     }
 
-    private void processCommands() {
+    public void processCommands() {
 
         //work session report
         if (user != null && projects != null && trackTimes != null && client != null && todos != null) {
-            Command workSessionCommand = new WorkSessionReportCommand(reportsService, user, projects, client, todos, trackTimes);
+            Command workSessionCommand = new WorkSessionReportCommand(reportsService, user, projects, todos, trackTimes);
             commandInvoker.executeCommand(workSessionCommand);
             resetData();
         }

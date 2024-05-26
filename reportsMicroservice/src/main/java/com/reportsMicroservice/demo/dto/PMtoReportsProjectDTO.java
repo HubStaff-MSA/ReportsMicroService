@@ -14,6 +14,7 @@ public class PMtoReportsProjectDTO implements Serializable {
     private Integer projectId;
     private String projectName;
     private Integer clientId;
+    private String clientName;
     private double budgetCost;
 
 }

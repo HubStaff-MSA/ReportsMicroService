@@ -37,8 +37,7 @@ public class ReportsService {
 
 
     @Transactional
-    public List<WorkSessionReport> generateWorkSessionReports(UserDTO user, List<PMtoReportsProjectDTO> projects,
-                                                              PMtoReportsClientDTO client, List<PMtoReportsToDoDTO> toDos,
+    public List<WorkSessionReport> generateWorkSessionReports(UserDTO user, List<PMtoReportsProjectDTO> projects, List<PMtoReportsToDoDTO> toDos,
                                                               List<TT_dto> trackTimes) {
         List<WorkSessionReport> reportList = new ArrayList<>();
         for (PMtoReportsProjectDTO project : projects) {
@@ -49,7 +48,7 @@ public class ReportsService {
                 for (PMtoReportsToDoDTO toDo : toDos) {
                     if (timesheet.getTo_do().equals(toDo.getTitle())) {
                         WorkSessionReport report = new WorkSessionReport(UUID.randomUUID(),
-                                client.getClientName(),
+                                project.getClientName(),
                                 project.getProjectName(),
                                 user.getFullName(),
                                 toDo.getDescription(),

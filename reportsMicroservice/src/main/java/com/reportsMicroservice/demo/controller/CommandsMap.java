@@ -27,6 +27,7 @@ public class CommandsMap {
         cmdMap.put("TimeAndActivityReportCommand", TimeAndActivityReportCommand.class);
         cmdMap.put("WeeklyLimitReportCommand", WeeklyLimitReportCommand.class);
         cmdMap.put("WorkSessionReportCommand", WorkSessionReportCommand.class);
+        cmdMap.put("WebServer_WorkSession", WebServer_WorkSession.class);
 
     }
 
