@@ -32,7 +32,7 @@ public class WebServer_TimeAndActivity implements Command {
         //List of time tracks
         CommandSender command2 = new CommandSender("ListOfTimeTracksByUsersIds", List.of(id),
                 "TT_R_Queue");
-       List<TT_dto> timetracks = (List<TT_dto>) rabbitTemplate.convertSendAndReceive("commandQueueTimeTracking", command2);
+       List<TT_dto> timetracks = (List<TT_dto>) rabbitTemplate.convertSendAndReceive("WebServerCommandQueueTimeTracking", command2);
 
         //List of projects
         CommandSender command3 = new CommandSender("getProjectsByUserIdCommand", id,

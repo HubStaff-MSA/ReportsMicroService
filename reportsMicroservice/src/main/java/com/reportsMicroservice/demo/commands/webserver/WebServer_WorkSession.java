@@ -43,7 +43,7 @@ public class WebServer_WorkSession implements Command {
         CommandSender command2 = new CommandSender("ListOfTimeTracksByUsersIds", List.of(id),
                 "TT_R_Queue");
         //rabbitMQServicePublisher.sendMessage("commandQueueTimeTracking", command2);
-        List<TT_dto> trackTimes = (List<TT_dto>) rabbitTemplate.convertSendAndReceive("commandQueueTimeTracking", command2);
+        List<TT_dto> trackTimes = (List<TT_dto>) rabbitTemplate.convertSendAndReceive("WebServerCommandQueueTimeTracking", command2);
 
         //command for projects
         CommandSender command3 = new CommandSender("getProjectsByUserIdCommand", id,

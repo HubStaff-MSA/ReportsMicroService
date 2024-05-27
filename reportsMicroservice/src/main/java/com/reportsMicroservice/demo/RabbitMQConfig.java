@@ -48,6 +48,14 @@ public class RabbitMQConfig {
     //Web Server
     @Bean
     public Queue commandQueueReports(){ return new Queue("commandQueueReports", false);}
+    @Bean
+    public Queue WebServerUserQueue() {return new Queue("WebServerUserQueue", false);}
+    @Bean
+    public Queue WebServerQueueProjects() {return new Queue("webServerCommandQueueProjects", false);}
+    @Bean
+    public Queue WebServerTimeTracking() {return new Queue("WebServerCommandQueueTimeTracking", false);}
+    @Bean
+    public Queue WebServerQueueFinance() {return new Queue("WebServerQueueFinance", false);}
 
     @Bean
     public Queue timetrack_reportsQueue() {
